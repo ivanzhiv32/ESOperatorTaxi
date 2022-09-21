@@ -23,20 +23,23 @@ namespace ESOperatorTaxi
         public MainWindow()
         {
             InitializeComponent();
-            string connStr = "server=s2.kts.tu-bryansk.ru;port=3306;user=IAS18.ZHivII;database=IAS18_ZHivII;password=3q%Md=Q2/4;";
-            MySqlConnection conn = new MySqlConnection(connStr);
-            conn.Open();
-            string sql = "SELECT * FROM clients";
-            MySqlCommand command = new MySqlCommand(sql, conn);
-            MySqlDataReader reader = command.ExecuteReader();
+            //string connStr = "server=s2.kts.tu-bryansk.ru;port=3306;user=IAS18.ZHivII;database=IAS18_ZHivII;password=3q%Md=Q2/4;";
+            //MySqlConnection conn = new MySqlConnection(connStr);
+            //conn.Open();
+            //string sql = "SELECT * FROM clients";
+            //MySqlCommand command = new MySqlCommand(sql, conn);
+            //MySqlDataReader reader = command.ExecuteReader();
 
-            DataTable dt = new DataTable();
-            dt.Load(reader);
+            //DataTable dt = new DataTable();
+            //dt.Load(reader);
+
+            //dataGrid.AutoGenerateColumns = true;
+            //dataGrid.ItemsSource = dt.DefaultView;
+            //conn.Close();
+
+            DataModel dataModel = new DataModel();
             dataGrid.AutoGenerateColumns = true;
-            dataGrid.ItemsSource = dt.DefaultView;
-            conn.Close();
+            dataGrid.ItemsSource = dataModel.Clients;
         }
-
-
     }
 }
