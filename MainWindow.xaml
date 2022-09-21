@@ -7,6 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="btnAdd">Добавить</Button>
+                <Button x:Name="btnDel">Удалить</Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <DataGrid x:Name="dataGrid">
+                    
+                </DataGrid>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>
