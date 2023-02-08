@@ -6,21 +6,27 @@ using System.Threading.Tasks;
 using System.Data;
 using MySql.Data.MySqlClient;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
 
 namespace ESOperatorTaxi
 {
-    class DataModel
+    // - Загрузка
+    // - Добавление
+    // - Редактирование
+    // - Удаление
+    class DbManager
     {
         private MySqlConnection dbConnection;
 
-        public DataModel() 
+        public DbManager() 
         {
             dbConnection = new MySqlConnection("server=s2.kts.tu-bryansk.ru;port=3306;user=IAS18.ZHivII;database=IAS18_ZHivII;password=3q%Md=Q2/4;");
-            dbConnection.Open();
-            LoadDrivers();
-            LoadCars();
-            LoadClients();
-            LoadOrders();
+            //dbConnection.Open();
+            //LoadDrivers();
+            //LoadCars();
+            //LoadClients();
+            //LoadOrders();
         }
 
         public ObservableCollection<Client> Clients { get; private set; }
@@ -32,7 +38,73 @@ namespace ESOperatorTaxi
         public Dictionary<int, string> FitDegree = new Dictionary<int, string>();
         public Dictionary<int, string> ClassesOrders = new Dictionary<int, string>();
 
-        public void LoadClients() 
+        /// <summary>
+        /// Загрузить сущности из таблицы базы данных по типу
+        /// </summary>
+        /// <typeparam name="T">Тип сущности</typeparam>
+        /// <returns>Список сущностей</returns>
+        public ICollection<T> LoadEntities<T>() where T : Entity, new()
+        {
+            Type typeItem = typeof(T);
+            var result = new List<T>();
+            if (typeItem.GetCustomAttributes(typeof(TableAttribute), true).FirstOrDefault() is TableAttribute tableAttr)
+            {
+                try
+                {
+                    dbConnection.Open();
+
+                    string sql = $"SELECT * FROM {tableAttr.Name}";
+                    MySqlCommand sqlCommand = new MySqlCommand(sql, dbConnection);
+                    DataTable dt = new DataTable();
+                    using (MySqlDataReader reader = sqlCommand.ExecuteReader())
+                    {
+                        dt.Load(reader);
+                    }
+
+                    var columnAttrs = new Dictionary<PropertyInfo, ColumnAttribute>();
+                    foreach (var prop in typeItem.GetProperties())
+                    {
+                        var attr = prop.GetCustomAttributes(typeof(ColumnAttribute), true).FirstOrDefault() as ColumnAttribute;
+                        if (attr != null)
+                            columnAttrs.Add(prop, attr);
+                    }
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        T item = new T();
+                        foreach (var prop in columnAttrs.Keys)
+                        {
+                            var value = row[columnAttrs[prop].Name];
+                            prop.SetValue(item, value);
+                        }
+                        result.Add(item);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    if (dbConnection.State != ConnectionState.Closed)
+                        dbConnection.Close();
+                }
+            }
+
+            return result;
+        }
+
+        public void Load() { }
+
+        public void Add<T>(T entity) where T : Entity { }
+
+        public void Update<T>(T entity) where T : Entity { }
+
+        public void Delete<T>(T entity) where T : Entity { }
+
+
+        #region Старая реализация
+        public void LoadClients()
         {
             Clients = new ObservableCollection<Client>();
 
@@ -46,8 +118,8 @@ namespace ESOperatorTaxi
             {
                 Clients.Add(
                     new Client()
-                    { 
-                        Id = (int)row["ID"], 
+                    {
+                        Id = (int)row["ID"],
                         Name = (string)row["Name"],
                         Patronymic = (string)row["Patronymic"],
                         Surname = (string)row["Surname"],
@@ -63,7 +135,7 @@ namespace ESOperatorTaxi
             string sql = "SELECT * FROM cars";
             MySqlCommand sqlCommand = new MySqlCommand(sql, dbConnection);
             DataTable dt = new DataTable();
-            using (MySqlDataReader reader = sqlCommand.ExecuteReader()) 
+            using (MySqlDataReader reader = sqlCommand.ExecuteReader())
                 dt.Load(reader);
 
 
@@ -73,7 +145,7 @@ namespace ESOperatorTaxi
                 string carClass = null;
                 sqlCommand = new MySqlCommand(sqlClass, dbConnection);
                 using (MySqlDataReader reader = sqlCommand.ExecuteReader())
-                    if (reader.Read()) carClass = (string)reader.GetValue(0);              
+                    if (reader.Read()) carClass = (string)reader.GetValue(0);
 
                 Cars.Add(
                     new Car()
@@ -144,7 +216,7 @@ namespace ESOperatorTaxi
         {
             string[] namesTables = new string[] { "car_classes", "fit_degree", "order_classes", "statuses_order" };
             string sql;
-            foreach(string table in namesTables)
+            foreach (string table in namesTables)
             {
                 sql = "SELECT * FROM" + table;
                 MySqlCommand sqlCommand = new MySqlCommand(sql, dbConnection);
@@ -174,7 +246,8 @@ namespace ESOperatorTaxi
                         break;
                 }
             }
-            
+
         }
+        #endregion
     }
 }
