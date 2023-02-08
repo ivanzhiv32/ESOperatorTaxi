@@ -27,6 +27,10 @@ namespace ESOperatorTaxi
         public ObservableCollection<Car> Cars { get; private set; }
         public ObservableCollection<Driver> Drivers { get; private set; }
         public ObservableCollection<Order> Orders { get; private set; }
+        public Dictionary<int, string> StatusesOrders = new Dictionary<int, string>();
+        public Dictionary<int, string> CarsClasses = new Dictionary<int, string>();
+        public Dictionary<int, string> FitDegree = new Dictionary<int, string>();
+        public Dictionary<int, string> ClassesOrders = new Dictionary<int, string>();
 
         public void LoadClients() 
         {
@@ -133,6 +137,43 @@ namespace ESOperatorTaxi
                         ClientId = (int)row["IdClient"]
                     });
             }
+        }
+
+        public void LoadDictionaries()
+        {
+            string[] namesTables = new string[] { "car_classes", "fit_degree", "order_classes", "statuses_order" };
+            string sql;
+            foreach(string table in namesTables)
+            {
+                sql = "SELECT * FROM" + table;
+                MySqlCommand sqlCommand = new MySqlCommand(sql, dbConnection);
+                DataTable dt = new DataTable();
+                using (MySqlDataReader reader = sqlCommand.ExecuteReader())
+                    dt.Load(reader);
+
+                Dictionary<int, string> entity = new Dictionary<int, string>();
+                foreach (DataRow row in dt.Rows)
+                {
+                    entity.Add((int)row["ID"], (string)row["Name"]);
+                }
+
+                switch (table)
+                {
+                    case "car_classes":
+                        CarsClasses = entity;
+                        break;
+                    case "fit_degree":
+                        FitDegree = entity;
+                        break;
+                    case "order_classes":
+                        ClassesOrders = entity;
+                        break;
+                    case "statuses_order":
+                        StatusesOrders = entity;
+                        break;
+                }
+            }
+            
         }
     }
 }
