@@ -10,15 +10,15 @@ namespace ESOperatorTaxi
     {
         private string comment;
         private int price;
-        private string orderClass;
-        private string status;
+        private int statusId;
+        private int orderClassId;
         private int driverId;
         private int clientId;
 
         public string Comment { get => comment; set => Set(ref comment, value); }
         public int Price { get => price; set => Set(ref price, value); }
-        public string OrderClass { get => orderClass; set => Set(ref orderClass, value); }
-        public string Status { get => status; set => Set(ref status, value); }
+        public int OrderClassId { get => orderClassId; set => Set(ref orderClassId, value); }
+        public int StatusId { get => statusId; set => Set(ref statusId, value); }
         public int DriverId { get => driverId; set => Set(ref driverId, value); }
         public int ClientId { get => clientId; set => Set(ref clientId, value); }
     }

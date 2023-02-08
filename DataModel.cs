@@ -116,8 +116,9 @@ namespace ESOperatorTaxi
         {
             Orders = new ObservableCollection<Order>();
 
-            string sql = "SELECT orders.ID, IdClient, IdDriver, Comment, Price, Name, Status FROM orders, order_classes, statuses_order " +
-                "WHERE order_classes.ID = orders.IdOrderClass AND statuses_order.ID = orders.IdOrderClass";
+            string sql = "SELECT * FROM orders";
+            //string sql = "SELECT orders.ID, IdClient, IdDriver, Comment, Price, Name, Status FROM orders, order_classes, statuses_order " +
+            //    "WHERE order_classes.ID = orders.IdOrderClass AND statuses_order.ID = orders.IdOrderClass";
             MySqlCommand sqlCommand = new MySqlCommand(sql, dbConnection);
             DataTable dt = new DataTable();
             using (MySqlDataReader reader = sqlCommand.ExecuteReader())
@@ -131,8 +132,8 @@ namespace ESOperatorTaxi
                         Id = (int)row["ID"],
                         Comment = (string)row["Comment"],
                         Price = (int)row["Price"],
-                        OrderClass = (string)row["Name"],
-                        Status = (string)row["Status"],
+                        OrderClassId = (int)row["IdOrderClass"],
+                        StatusId = (int)row["IdStatus"],
                         DriverId = (int)row["IdDriver"],
                         ClientId = (int)row["IdClient"]
                     });
