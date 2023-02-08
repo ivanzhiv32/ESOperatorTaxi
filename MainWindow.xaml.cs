@@ -25,8 +25,8 @@ namespace ESOperatorTaxi
             InitializeComponent();
 
             DataModel dataModel = new DataModel();
-            dataGrid.AutoGenerateColumns = true;
-            dataGrid.ItemsSource = dataModel.Drivers;
+            dataGridOrders.AutoGenerateColumns = true;
+            dataGridOrders.ItemsSource = dataModel.Orders;
         }
     }
 }

@@ -18,11 +18,15 @@ namespace ESOperatorTaxi
             dbConnection = new MySqlConnection("server=s2.kts.tu-bryansk.ru;port=3306;user=IAS18.ZHivII;database=IAS18_ZHivII;password=3q%Md=Q2/4;");
             dbConnection.Open();
             LoadDrivers();
+            LoadCars();
+            LoadClients();
+            LoadOrders();
         }
 
         public ObservableCollection<Client> Clients { get; private set; }
         public ObservableCollection<Car> Cars { get; private set; }
         public ObservableCollection<Driver> Drivers { get; private set; }
+        public ObservableCollection<Order> Orders { get; private set; }
 
         public void LoadClients() 
         {
@@ -92,13 +96,6 @@ namespace ESOperatorTaxi
 
             foreach (DataRow row in dt.Rows)
             {
-                string sqlNumberCar = "SELECT Number FROM cars WHERE ID=" + row["IdCar"];
-                string numberCar = null;
-                sqlCommand = new MySqlCommand(sqlNumberCar, dbConnection);
-                using (MySqlDataReader reader = sqlCommand.ExecuteReader())
-                    if (reader.Read()) numberCar = (string)reader.GetValue(0);
-                //Drivers.Add(new Driver());
-
                 Drivers.Add(
                     new Driver()
                     {
@@ -106,8 +103,34 @@ namespace ESOperatorTaxi
                         Surname = (string)row["Surname"],
                         Name = (string)row["Name"],
                         Patronymic = (string)row["Patronomic"],
-                        NumberCar = numberCar,
-                        //IsFree = (bool)row["isFree"],
+                        IsFree = Convert.ToBoolean(row["isFree"]),
+                    });
+            }
+        }
+
+        public void LoadOrders()
+        {
+            Orders = new ObservableCollection<Order>();
+
+            string sql = "SELECT orders.ID, IdClient, IdDriver, Comment, Price, Name, Status FROM orders, order_classes, statuses_order " +
+                "WHERE order_classes.ID = orders.IdOrderClass AND statuses_order.ID = orders.IdOrderClass";
+            MySqlCommand sqlCommand = new MySqlCommand(sql, dbConnection);
+            DataTable dt = new DataTable();
+            using (MySqlDataReader reader = sqlCommand.ExecuteReader())
+                dt.Load(reader);
+
+            foreach (DataRow row in dt.Rows)
+            {
+                Orders.Add(
+                    new Order()
+                    {
+                        Id = (int)row["ID"],
+                        Comment = (string)row["Comment"],
+                        Price = (int)row["Price"],
+                        OrderClass = (string)row["Name"],
+                        Status = (string)row["Status"],
+                        DriverId = (int)row["IdDriver"],
+                        ClientId = (int)row["IdClient"]
                     });
             }
         }
