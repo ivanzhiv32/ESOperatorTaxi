@@ -17,7 +17,7 @@ namespace ESOperatorTaxi
         Business
     }
 
-    [Table("car")]
+    [Table("cars")]
     class Car:Entity
     {
         private string brand;

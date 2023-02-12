@@ -12,47 +12,50 @@ using System.Collections;
 
 namespace ESOperatorTaxi
 {
-    // - Загрузка
-    // - Добавление
-    // - Редактирование
-    // - Удаление
     class DbManager
     {
         private MySqlConnection dbConnection;
 
+        private ObservableCollection<Client> clients = new ObservableCollection<Client>();
+        private ObservableCollection<Car> cars = new ObservableCollection<Car>();
+        private ObservableCollection<Driver> drivers = new ObservableCollection<Driver>();
+        private ObservableCollection<Order> orders = new ObservableCollection<Order>();
+
         public DbManager() 
         {
             dbConnection = new MySqlConnection("server=s2.kts.tu-bryansk.ru;port=3306;user=IAS18.ZHivII;database=IAS18_ZHivII;password=3q%Md=Q2/4;");
-            //dbConnection.Open();
-            //LoadDrivers();
-            //LoadCars();
-            //LoadClients();
-            //LoadOrders();
+
+            Clients = new ReadOnlyObservableCollection<Client>(clients);
+            Cars = new ReadOnlyObservableCollection<Car>(cars);
+            Drivers = new ReadOnlyObservableCollection<Driver>(drivers);
+            Orders = new ReadOnlyObservableCollection<Order>(orders);
         }
 
-        public ObservableCollection<Client> Clients { get; private set; } = new ObservableCollection<Client>();
-        public ObservableCollection<Car> Cars { get; private set; }
-        public ObservableCollection<Driver> Drivers { get; private set; }
-        public ObservableCollection<Order> Orders { get; private set; }
-        public Dictionary<int, string> StatusesOrders = new Dictionary<int, string>();
-        public Dictionary<int, string> CarsClasses = new Dictionary<int, string>();
-        public Dictionary<int, string> FitDegree = new Dictionary<int, string>();
-        public Dictionary<int, string> ClassesOrders = new Dictionary<int, string>();
+        public ReadOnlyObservableCollection<Client> Clients { get; private set; }
+        public ReadOnlyObservableCollection<Car> Cars { get; private set; }
+        public ReadOnlyObservableCollection<Driver> Drivers { get; private set; }
+        public ReadOnlyObservableCollection<Order> Orders { get; private set; }
 
         /// <summary>
-        /// Найти коллекцию сущностей по типу сущности
+        /// Найти коллекцию сущностей по типу
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        // NOTE: попробовать реализовать поиск через рефлексию
-        public IList FindCollectionByType<T>() where T: Entity 
+        /// <typeparam name="T">Тип сущности</typeparam>
+        /// <returns>Найденный список сущностей</returns>
+        private IList FindCollectionByType<T>() where T: Entity 
         {
+            // NOTE: Для замены switch/case попробовать реализовать поиск через рефлексию
             Type type = typeof(T);
             switch (type.Name)
             {
                 case nameof(Client):
-                    return Clients;
-                // Добавить остальные коллекции
+                    return clients;
+                case nameof(Car):
+                    return cars;
+                case nameof(Driver):
+                    return drivers;
+                case nameof(Order):
+                    return orders;
+                // Добавить остальные коллекции сущностей
                 default:
                     return null;
             }
@@ -62,7 +65,7 @@ namespace ESOperatorTaxi
         /// Загрузить сущности из таблицы базы данных по типу
         /// </summary>
         /// <typeparam name="T">Тип сущности</typeparam>
-        /// <returns>Список сущностей</returns>
+        /// <returns>Коллекция сущностей</returns>
         public ICollection<T> LoadEntities<T>() where T : Entity, new()
         {
             try
@@ -113,7 +116,19 @@ namespace ESOperatorTaxi
             }
         }
 
-        public void Load() { }
+        /// <summary>
+        /// Загрузить все сущности из базы данных в локальные коллекции
+        /// </summary>
+        public void Load() 
+        {
+            var loadedСlients = LoadEntities<Client>();
+            clients.ClearAndRange(loadedСlients);
+
+            var loadedCars = LoadEntities<Car>();
+            cars.ClearAndRange(loadedCars);
+
+            // Загрузка и маппинг через внешние ключи остальных сущностей
+        }
 
         public void Add<T>(T entity) where T : Entity 
         {
@@ -122,15 +137,16 @@ namespace ESOperatorTaxi
                 Type typeEntity = typeof(T);
                 if (typeEntity.GetCustomAttributes(typeof(TableAttribute), true).FirstOrDefault() is TableAttribute tableAttr)
                 {
+                    // Поиск названия столбца идентификатора
+                    var idColumnAttr = typeEntity.GetProperty(nameof(entity.Id)).GetCustomAttribute<ColumnAttribute>();
+
                     // Подготовка аргументов для Sql-команды
                     var arguments = new Dictionary<string, object>();
-                    //var columnAttrs = new Dictionary<PropertyInfo, ColumnAttribute>();
                     foreach (var prop in typeEntity.GetProperties())
                     {
                         var attr = prop.GetCustomAttributes(typeof(ColumnAttribute), true).FirstOrDefault() as ColumnAttribute;
-                        if (attr != null && attr.Name != "ID")
+                        if (attr != null && attr != idColumnAttr)
                             arguments.Add(attr.Name, prop.GetValue(entity));
-                        //columnAttrs.Add(prop, attr);
                     }
                     
                     // Создание Sql-комаынды
@@ -139,7 +155,6 @@ namespace ESOperatorTaxi
                     foreach (var arg in arguments)
                     {
                         sqlColumns.Append($"{arg.Key},");
-                        //sqlValues.Append($"{arg.Value},");
                         sqlValues.Append($"@{arg.Key},");
                     }
                     sqlColumns.Remove(sqlColumns.Length - 1, 1);
@@ -150,12 +165,16 @@ namespace ESOperatorTaxi
 
                     // Создание и выполнение Sql-команды
                     dbConnection.Open();
-                    MySqlCommand sqlCommand = new MySqlCommand(sql.ToString(), dbConnection);
-                    foreach (var arg in arguments) // Добавление параметров
-                        sqlCommand.Parameters.AddWithValue($"@{arg.Key}", arg.Value);
-                    var result = sqlCommand.ExecuteScalar();
-                    int.TryParse(result.ToString(), out int id);
-                    entity.Id = id;
+                    using (MySqlCommand sqlCommand = new MySqlCommand(sql.ToString(), dbConnection)) 
+                    {
+                        // Добавление значений параметров
+                        foreach (var arg in arguments)
+                            sqlCommand.Parameters.AddWithValue($"@{arg.Key}", arg.Value);
+
+                        var result = sqlCommand.ExecuteScalar();
+                        int.TryParse(result.ToString(), out int id);
+                        entity.Id = id;
+                    }
 
                     // Добавление сущности в локальное хранилище
                     var collection = FindCollectionByType<T>();
@@ -173,156 +192,92 @@ namespace ESOperatorTaxi
             }
         }
 
-        public void Update<T>(T entity) where T : Entity { }
-
-        public void Delete<T>(T entity) where T : Entity { }
-
-
-        #region Старая реализация
-        public void LoadClients()
+        public void Update<T>(T entity) where T : Entity 
         {
-            Clients = new ObservableCollection<Client>();
-
-            string sql = "SELECT * FROM clients";
-            MySqlCommand sqlCommand = new MySqlCommand(sql, dbConnection);
-            DataTable dt = new DataTable();
-            using (MySqlDataReader reader = sqlCommand.ExecuteReader())
-                dt.Load(reader);
-
-            foreach (DataRow row in dt.Rows)
+            try
             {
-                Clients.Add(
-                    new Client()
-                    {
-                        Id = (int)row["ID"],
-                        Name = (string)row["Name"],
-                        Patronymic = (string)row["Patronymic"],
-                        Surname = (string)row["Surname"],
-                        PhoneNumber = (decimal)row["PhoneNumber"],
-                    });
-            }
-        }
-
-        //public void LoadCars()
-        //{
-        //    Cars = new ObservableCollection<Car>();
-
-        //    string sql = "SELECT * FROM cars";
-        //    MySqlCommand sqlCommand = new MySqlCommand(sql, dbConnection);
-        //    DataTable dt = new DataTable();
-        //    using (MySqlDataReader reader = sqlCommand.ExecuteReader())
-        //        dt.Load(reader);
-
-
-        //    foreach (DataRow row in dt.Rows)
-        //    {
-        //        string sqlClass = "SELECT Name FROM car_classes WHERE ID=" + row["IdClass"];
-        //        string carClass = null;
-        //        sqlCommand = new MySqlCommand(sqlClass, dbConnection);
-        //        using (MySqlDataReader reader = sqlCommand.ExecuteReader())
-        //            if (reader.Read()) carClass = (string)reader.GetValue(0);
-
-        //        Cars.Add(
-        //            new Car()
-        //            {
-        //                Id = (int)row["ID"],
-        //                Brand = (string)row["Brand"],
-        //                Number = (string)row["Number"],
-        //                Colour = (string)row["Colour"],
-        //                ClassName = carClass,
-        //            });
-        //    }
-        //}
-
-        public void LoadDrivers()
-        {
-            Drivers = new ObservableCollection<Driver>();
-
-            string sql = "SELECT * FROM drivers";
-            MySqlCommand sqlCommand = new MySqlCommand(sql, dbConnection);
-            DataTable dt = new DataTable();
-            using (MySqlDataReader reader = sqlCommand.ExecuteReader())
-                dt.Load(reader);
-
-
-            foreach (DataRow row in dt.Rows)
-            {
-                Drivers.Add(
-                    new Driver()
-                    {
-                        Id = (int)row["ID"],
-                        Surname = (string)row["Surname"],
-                        Name = (string)row["Name"],
-                        Patronymic = (string)row["Patronomic"],
-                        IsFree = Convert.ToBoolean(row["isFree"]),
-                    });
-            }
-        }
-
-        public void LoadOrders()
-        {
-            Orders = new ObservableCollection<Order>();
-
-            string sql = "SELECT * FROM orders";
-            //string sql = "SELECT orders.ID, IdClient, IdDriver, Comment, Price, Name, Status FROM orders, order_classes, statuses_order " +
-            //    "WHERE order_classes.ID = orders.IdOrderClass AND statuses_order.ID = orders.IdOrderClass";
-            MySqlCommand sqlCommand = new MySqlCommand(sql, dbConnection);
-            DataTable dt = new DataTable();
-            using (MySqlDataReader reader = sqlCommand.ExecuteReader())
-                dt.Load(reader);
-
-            foreach (DataRow row in dt.Rows)
-            {
-                Orders.Add(
-                    new Order()
-                    {
-                        Id = (int)row["ID"],
-                        Comment = (string)row["Comment"],
-                        Price = (int)row["Price"],
-                        OrderClassId = (int)row["IdOrderClass"],
-                        StatusId = (int)row["IdStatus"],
-                        DriverId = (int)row["IdDriver"],
-                        ClientId = (int)row["IdClient"]
-                    });
-            }
-        }
-
-        public void LoadDictionaries()
-        {
-            string[] namesTables = new string[] { "car_classes", "fit_degree", "order_classes", "statuses_order" };
-            string sql;
-            foreach (string table in namesTables)
-            {
-                sql = "SELECT * FROM" + table;
-                MySqlCommand sqlCommand = new MySqlCommand(sql, dbConnection);
-                DataTable dt = new DataTable();
-                using (MySqlDataReader reader = sqlCommand.ExecuteReader())
-                    dt.Load(reader);
-
-                Dictionary<int, string> entity = new Dictionary<int, string>();
-                foreach (DataRow row in dt.Rows)
+                Type typeEntity = typeof(T);
+                if (typeEntity.GetCustomAttributes(typeof(TableAttribute), true).FirstOrDefault() is TableAttribute tableAttr)
                 {
-                    entity.Add((int)row["ID"], (string)row["Name"]);
-                }
+                    // Поиск названия столбца идентификатора
+                    var idColumnAttr = typeEntity.GetProperty(nameof(entity.Id)).GetCustomAttribute<ColumnAttribute>();
 
-                switch (table)
-                {
-                    case "car_classes":
-                        CarsClasses = entity;
-                        break;
-                    case "fit_degree":
-                        FitDegree = entity;
-                        break;
-                    case "order_classes":
-                        ClassesOrders = entity;
-                        break;
-                    case "statuses_order":
-                        StatusesOrders = entity;
-                        break;
+                    // Подготовка аргументов для Sql-команды
+                    var arguments = new Dictionary<string, object>();
+                    foreach (var prop in typeEntity.GetProperties())
+                    {
+                        var attr = prop.GetCustomAttributes(typeof(ColumnAttribute), true).FirstOrDefault() as ColumnAttribute;
+                        if (attr != null && attr != idColumnAttr)
+                            arguments.Add(attr.Name, prop.GetValue(entity));
+                    }
+
+                    // Создание Sql-комаынды
+                    StringBuilder sql = new StringBuilder($"UPDATE {tableAttr.Name} SET ");
+                    foreach (var arg in arguments)
+                        sql.Append($"{arg.Key} = @{arg.Key},");
+
+                    sql.Remove(sql.Length - 1, 1);
+                    sql.Append($" WHERE ID = {entity.Id}");
+
+                    // Создание и выполнение Sql-команды
+                    dbConnection.Open();
+                    using (MySqlCommand sqlCommand = new MySqlCommand(sql.ToString(), dbConnection)) 
+                    {
+                        // Добавление значений параметров
+                        foreach (var arg in arguments)
+                            sqlCommand.Parameters.AddWithValue($"@{arg.Key}", arg.Value);
+
+                        var result = sqlCommand.ExecuteNonQuery();
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                
+                if (dbConnection.State != ConnectionState.Closed)
+                    dbConnection.Close();
+            }
         }
-        #endregion
+
+        public void Delete<T>(T entity) where T : Entity 
+        {
+            try
+            {
+                Type typeEntity = typeof(T);
+                if (typeEntity.GetCustomAttributes(typeof(TableAttribute), true).FirstOrDefault() is TableAttribute tableAttr)
+                {
+                    // Поиск названия столбца идентификатора
+                    var idColumnAttr = typeEntity.GetProperty(nameof(entity.Id)).GetCustomAttribute<ColumnAttribute>();
+                    string idColumnName = idColumnAttr != null ? idColumnAttr.Name : "ID";
+
+                    // Создание и выполнение Sql-команды
+                    string sql = $"DELETE FROM {tableAttr.Name} WHERE {idColumnName} = {entity.Id}";
+                    dbConnection.Open();
+                    using (MySqlCommand sqlCommand = new MySqlCommand(sql.ToString(), dbConnection))
+                    {
+                        int rows = sqlCommand.ExecuteNonQuery();
+                        if (rows > 0) 
+                        {
+                            // Удаление сущности из локальной коллекции
+                            var collection = FindCollectionByType<T>();
+                            collection?.Remove(entity);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (dbConnection.State != ConnectionState.Closed)
+                    dbConnection.Close();
+            }
+        }
     }
 }

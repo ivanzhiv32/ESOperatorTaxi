@@ -23,23 +23,8 @@ namespace ESOperatorTaxi
         public MainWindow()
         {
             InitializeComponent();
-
             DbManager dbManager = new DbManager();
-            Client client = new Client()
-            {
-                Name = "Name 1",
-                Surname = "Surname 1",
-                Patronymic = "Patronymic",
-                PhoneNumber = 123
-            };
-            var list = dbManager.FindCollectionByType<Client>();
-            list.Add(client);
-            //dbManager.Add(client);
-
-            //var entities = dbManager.LoadEntities<Client>();
-
-            //dataGridOrders.AutoGenerateColumns = true;
-            //dataGridOrders.ItemsSource = dataModel.Orders;
+            dbManager.Load();
         }
     }
 }
