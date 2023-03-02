@@ -23,10 +23,8 @@ namespace ESOperatorTaxi
         public MainWindow()
         {
             InitializeComponent();
-
-            DataModel dataModel = new DataModel();
-            dataGridOrders.AutoGenerateColumns = true;
-            dataGridOrders.ItemsSource = dataModel.Orders;
+            DbManager dbManager = new DbManager();
+            dbManager.Load();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -11,6 +12,7 @@ namespace ESOperatorTaxi
     abstract class Entity : INotifyPropertyChanged
     {
         private int id;
+        [Column("ID")]
         public int Id { get => id; set => Set(ref id, value); }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -22,8 +24,8 @@ namespace ESOperatorTaxi
 
         protected virtual bool Set<T>(ref T storage, T value, [CallerMemberName] string propertyName = "")
         {
-            //if (EqualityComparer<T>.Default.Equals(storage, value))
-            //    return false;
+            if (EqualityComparer<T>.Default.Equals(storage, value))
+                return false;
 
             storage = value;
             OnPropertyChanged(propertyName);
