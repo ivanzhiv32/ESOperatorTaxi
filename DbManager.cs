@@ -20,6 +20,11 @@ namespace ESOperatorTaxi
         private ObservableCollection<Car> cars = new ObservableCollection<Car>();
         private ObservableCollection<Driver> drivers = new ObservableCollection<Driver>();
         private ObservableCollection<Order> orders = new ObservableCollection<Order>();
+        private ObservableCollection<Review> reviews = new ObservableCollection<Review>();
+        private ObservableCollection<TripTicket> tripTickets = new ObservableCollection<TripTicket>();
+        private ObservableCollection<DriverRating> driverRatings = new ObservableCollection<DriverRating>();
+        private ObservableCollection<City> cities = new ObservableCollection<City>();
+        private ObservableCollection<Street> streets = new ObservableCollection<Street>();
 
         public DbManager() 
         {
@@ -29,12 +34,22 @@ namespace ESOperatorTaxi
             Cars = new ReadOnlyObservableCollection<Car>(cars);
             Drivers = new ReadOnlyObservableCollection<Driver>(drivers);
             Orders = new ReadOnlyObservableCollection<Order>(orders);
+            Reviews = new ReadOnlyObservableCollection<Review>(reviews);
+            TripTickets = new ReadOnlyObservableCollection<TripTicket>(tripTickets);
+            DriverRatings = new ReadOnlyObservableCollection<DriverRating>(driverRatings);
+            Cities = new ReadOnlyObservableCollection<City>(cities);
+            Streets = new ReadOnlyObservableCollection<Street>(streets);
         }
 
         public ReadOnlyObservableCollection<Client> Clients { get; private set; }
         public ReadOnlyObservableCollection<Car> Cars { get; private set; }
         public ReadOnlyObservableCollection<Driver> Drivers { get; private set; }
         public ReadOnlyObservableCollection<Order> Orders { get; private set; }
+        public ReadOnlyObservableCollection<Review> Reviews { get; private set; }
+        public ReadOnlyObservableCollection<TripTicket> TripTickets { get; private set; }
+        public ReadOnlyObservableCollection<DriverRating> DriverRatings { get; private set; }
+        public ReadOnlyObservableCollection<City> Cities { get; private set; }
+        public ReadOnlyObservableCollection<Street> Streets { get; private set; }
 
         /// <summary>
         /// Найти коллекцию сущностей по типу
@@ -55,7 +70,14 @@ namespace ESOperatorTaxi
                     return drivers;
                 case nameof(Order):
                     return orders;
-                // Добавить остальные коллекции сущностей
+                case nameof(Review):
+                    return reviews;
+                case nameof(TripTicket):
+                    return tripTickets;
+                case nameof(City):
+                    return cities;
+                case nameof(Street):
+                    return streets;
                 default:
                     return null;
             }
@@ -98,6 +120,21 @@ namespace ESOperatorTaxi
                         foreach (var prop in columnAttrs.Keys)
                         {
                             var value = row[columnAttrs[prop].Name];
+                            
+                            if (prop.PropertyType == typeof(Boolean))
+                            {
+                                prop.SetValue(item, Convert.ToBoolean(value));
+                                continue;
+                            }
+                            else if (prop.PropertyType == typeof(int) && value.ToString() == "")
+                            {
+                                value = null;
+                            }
+                            else if(value.ToString() == "")
+                            {
+                                value = "";
+                            }
+                            
                             prop.SetValue(item, value);
                         }
                         result.Add(item);
@@ -122,12 +159,58 @@ namespace ESOperatorTaxi
         public void Load() 
         {
             var loadedСlients = LoadEntities<Client>();
-            clients.ClearAndRange(loadedСlients);
+            clients.ClearAndAddRange(loadedСlients);
 
             var loadedCars = LoadEntities<Car>();
-            cars.ClearAndRange(loadedCars);
+            cars.ClearAndAddRange(loadedCars);
 
-            // Загрузка и маппинг через внешние ключи остальных сущностей
+            var loadedDrivers = LoadEntities<Driver>();
+            drivers.ClearAndAddRange(loadedDrivers);
+            foreach (var driver in drivers)
+            {
+                driver.Car = cars.FirstOrDefault(c => c.Id == driver.CarId);
+            }
+
+            var loadedTripTickets = LoadEntities<TripTicket>();
+            tripTickets.ClearAndAddRange(loadedTripTickets);
+            foreach (var tripTicket in tripTickets)
+            {
+                tripTicket.Driver = drivers.FirstOrDefault(c => c.Id == tripTicket.DriverId);
+            }
+
+            var loadedDriverRatings = LoadEntities<DriverRating>();
+            driverRatings.ClearAndAddRange(loadedDriverRatings);
+            foreach (var driverRating in driverRatings)
+            {
+                driverRating.Driver = drivers.FirstOrDefault(c => c.Id == driverRating.IdDriver);
+            }
+
+            var loadedCities = LoadEntities<City>();
+            cities.ClearAndAddRange(loadedCities);
+
+            var loadedStreets = LoadEntities<Street>();
+            streets.ClearAndAddRange(loadedStreets);
+            foreach (var street in streets)
+            {
+                street.City = cities.FirstOrDefault(c => c.Id == street.CityId);
+            }
+
+            var loadedOrders = LoadEntities<Order>();
+            orders.ClearAndAddRange(loadedOrders);
+            foreach (var order in orders)
+            {
+                order.Client = clients.FirstOrDefault(c => c.Id == order.ClientId);
+                order.Driver = drivers.FirstOrDefault(c => c.Id == order.DriverId);
+                order.StartStreet = streets.FirstOrDefault(c => c.Id == order.StartStreetId);
+                order.FinishStreet = streets.FirstOrDefault(c => c.Id == order.FinishStreetId);
+            }
+
+            var loadedReviews = LoadEntities<Review>();
+            reviews.ClearAndAddRange(loadedReviews);
+            foreach (var review in reviews)
+            {
+                review.Order = orders.FirstOrDefault(c => c.Id == review.OrderId);
+            }
         }
 
         public void Add<T>(T entity) where T : Entity 

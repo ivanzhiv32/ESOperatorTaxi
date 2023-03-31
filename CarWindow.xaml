@@ -1,0 +1,52 @@
+﻿<Window x:Class="ESOperatorTaxi.CarWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ESOperatorTaxi"
+        mc:Ignorable="d"
+        Title="Добавление авто" Height="198.327" Width="198.686">
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0">Марка</Label>
+        <TextBox x:Name="brand_tb" Grid.Row="0" Grid.Column="1"></TextBox>
+
+        <Label Grid.Row="1" Grid.Column="0">Модель</Label>
+        <TextBox x:Name="model_tb" Grid.Row="1" Grid.Column="1"></TextBox>
+
+        <Label Grid.Row="2" Grid.Column="0">Рег. номер</Label>
+        <TextBox x:Name="number_tb" Grid.Row="2" Grid.Column="1"></TextBox>
+
+        <Label Grid.Row="3" Grid.Column="0">Класс</Label>
+        <ComboBox x:Name="carClass_cb" Margin="3" Grid.Row="3" Grid.Column="1"></ComboBox>
+
+        <Label Grid.Row="4" Grid.Column="0">Цвет</Label>
+        <TextBox x:Name="colour_tb" Grid.Row="4" Grid.Column="1"></TextBox>
+
+        <Button x:Name="addCar_btn" Visibility="Hidden" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Click="addCar_btn_Click">Добавить автомобиль</Button>
+        <Button x:Name="updateCar_btn" Visibility="Hidden" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Click="updateCar_btn_Click">Сохранить изменения</Button>
+
+    </Grid>
+</Window>

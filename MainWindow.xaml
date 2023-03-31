@@ -5,43 +5,197 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ESOperatorTaxi"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="800">
+    <Window.Resources>
+        <Style TargetType="ComboBox">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="2"/>
+            <Style.Triggers>
+                <Trigger Property="SelectedItem" Value="{x:Null}">
+                    <Setter Property="SelectedIndex" Value="0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <StackPanel Orientation="Vertical">
-            <TabControl Height="418" Margin="0,0,0,0">
-                <TabItem Header="Заказы" Height="23" Margin="-2,-2,-1.6,-0.2" VerticalAlignment="Top">
-                    <Grid Background="#FFE5E5E5">
+            <TabControl Height="567" Margin="0,0,0,0" SelectionChanged="TabControl_SelectionChanged">
+                <TabItem x:Name="TabOrders" Header="Заказы">
+                    <StackPanel Orientation="Vertical">
                         <ToolBar HorizontalAlignment="Left" Height="27" Margin="1,1,1,1" VerticalAlignment="Top" Width="788">
-                            <ToggleButton>Добавить</ToggleButton>
+                            <Button x:Name="addOrder_btn" Click="addOrder_btn_Click" Margin="0,0,0,0.4" VerticalAlignment="Stretch">
+                                Добавить
+                            </Button>
                             <Separator />
-                            <Button>Удалить</Button>
+                            <Button x:Name="deleteOrder_btn" Click="deleteOrder_btn_Click">
+                                Удалить
+                            </Button>
+                            <Separator/>
+                            <Button x:Name="changeOrder_btn" Click="changeOrder_btn_Click">
+                                Изменить
+                            </Button>
                             <Separator />
-                            <Button>Изменить</Button>
+                            <Button x:Name="updateOrder_btn" Click="updateOrder_btn_Click">
+                                Обновить
+                            </Button>
+                            <Separator />
                         </ToolBar>
-                        <DataGrid x:Name="dataGridOrders" HorizontalAlignment="Left" Height="320" Margin="1,28,1,1" VerticalAlignment="Top" Width="786"/>
-                    </Grid>
+                        <Grid Margin="10 5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"></ColumnDefinition>
+                                <ColumnDefinition Width="120"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0">Статус</Label>
+                            <ComboBox x:Name="statusOrder_cb" Grid.Row="0" Grid.Column="1" Text="Не выбрано"></ComboBox>
+
+                            <Label Grid.Row="1" Grid.Column="0">Тел. водителя</Label>
+                            <TextBox x:Name="driverNumber_tb" Grid.Row="1" Grid.Column="1" ></TextBox>
+
+                            <Label Grid.Row="2" Grid.Column="0">Класс заказа</Label>
+                            <ComboBox x:Name="classOrder_cb" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"></ComboBox>
+
+                            <Label Grid.Row="3" Grid.Column="0">Дата</Label>
+                            <DatePicker x:Name="dateOrder_dp" Grid.Row="3" Grid.Column="1"></DatePicker>
+
+                            <Button x:Name="applyOrderFilter_btn" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Height="30" Click="applyOrderFilter_btn_Click">Применить фильтр</Button>
+                        </Grid>
+
+                        <DataGrid x:Name="dataGridOrders" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top" Width="776" Height="340">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Статус" Binding="{Binding Path=StatusId}" Width="70"/>
+                                <DataGridTextColumn Header="Тел. клиента" Binding="{Binding Path=Client.PhoneNumber}" Width="100" />
+                                <DataGridTextColumn Header="Номер авто" Binding="{Binding Path=Driver.Car.Number}" Width="75" />
+                                <DataGridTextColumn Header="Цена" Binding="{Binding Path=Price}" Width="50" />
+                                <DataGridTextColumn Header="Класс заказа" Binding="{Binding Path=OrderClassId}" Width="80" />
+                                <DataGridTextColumn Header="Дата и время" Binding="{Binding Path=Date.Date}" Width="90" />
+                                <DataGridTextColumn Header="Адрес подачи" Binding="{Binding Path=StartAdress}" Width="110" />
+                                <DataGridTextColumn Header="Адрес назначения" Binding="{Binding Path=FinishAdress}" Width="110" />
+                                <DataGridTextColumn Header="Описание" Binding="{Binding Path=Comment}" Width="80" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
                 </TabItem>
-                <TabItem Header="Водители">
-                    <Grid Background="#FFE5E5E5">
+                <TabItem x:Name="TabDrivers" Header="Водители">
+                    <StackPanel Orientation="Vertical">
                         <ToolBar HorizontalAlignment="Left" Height="27" Margin="1,1,1,1" VerticalAlignment="Top" Width="788">
-                            <ToggleButton>Добавить</ToggleButton>
+                            <Button x:Name="addDriver_btn" Click="addDriver_btn_Click">Добавить</Button>
                             <Separator />
-                            <Button>Удалить</Button>
+                            <Button x:Name="deleteDriver_btn" Click="deleteDriver_btn_Click">Удалить</Button>
                             <Separator />
-                            <Button>Изменить</Button>
+                            <Button x:Name="changeDriver_btn" Click="changeDriver_btn_Click">Изменить</Button>
+                            <Separator />
+                            <Button x:Name="updateDriver_btn" Click="updateDriver_btn_Click">Обновить</Button>
                         </ToolBar>
-                    </Grid>
+                        <Grid Margin="10 5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"></ColumnDefinition>
+                                <ColumnDefinition Width="120"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0">Фамилия</Label>
+                            <TextBox x:Name="driverSurname_tb" Grid.Row="0" Grid.Column="1"></TextBox>
+
+                            <Label Grid.Row="1" Grid.Column="0">Тел. номер</Label>
+                            <TextBox x:Name="driverPhoneNumber_tb" Grid.Row="1" Grid.Column="1"></TextBox>
+
+                            <Label Grid.Row="2" Grid.Column="0">Статус</Label>
+                            <ComboBox x:Name="statusDriver_cb" Grid.Row="2" Grid.Column="1"></ComboBox>
+
+                            <Label Grid.Row="3" Grid.Column="0">№ автомобиля</Label>
+                            <TextBox x:Name="numberCar_tb"  Grid.Row="3" Grid.Column="1"></TextBox>
+
+                            <Button x:Name="applyDriverFilter_btn" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Height="30" Click="applyDriverFilter_btn_Click">Применить фильтр</Button>
+                        </Grid>
+                        <DataGrid x:Name="dataGridDrivers" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top" Width="776" Height="342">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Surname}" Width="100" />
+                                <DataGridTextColumn Header="Имя"  Binding="{Binding Path=Name}" Width="100" />
+                                <DataGridTextColumn Header="Отчество" Binding="{Binding Path=Patronymic}" Width="100" />
+                                <DataGridTextColumn Header="Рег. номер авто" Binding="{Binding Path=Car.Number}" Width="100" />
+                                <DataGridTextColumn Header="Статус" Binding="{Binding Path=Status}" Width="80" />
+                                <DataGridTextColumn Header="Тел. номер" Binding="{Binding Path=PhoneNumber}" Width="100" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
                 </TabItem>
-                <TabItem Header="Автомобили" Height="23" Margin="-2,-2,-1.6,-0.2" VerticalAlignment="Top">
-                    <Grid Background="#FFE5E5E5">
-                        <ToolBar HorizontalAlignment="Left" Height="27" Margin="1,1,1,1" VerticalAlignment="Top" Width="788">
-                            <ToggleButton>Добавить</ToggleButton>
+                <TabItem x:Name="TabCars" Header="Автомобили">
+                    <StackPanel Orientation="Vertical">
+                        <ToolBar HorizontalAlignment="Left" Height="27" Margin="1" VerticalAlignment="Top" Width="788">
+                            <Button x:Name="addCar_btn" Click="addCar_btn_Click">Добавить</Button>
                             <Separator />
-                            <Button>Удалить</Button>
+                            <Button x:Name="delCar_btn">Удалить</Button>
                             <Separator />
-                            <Button>Изменить</Button>
+                            <Button x:Name="changeCar_btn" Click="changeCar_btn_Click">Изменить</Button>
                         </ToolBar>
-                    </Grid>
+
+                        <Grid Margin="10 5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"></ColumnDefinition>
+                                <ColumnDefinition Width="120"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0">Марка</Label>
+                            <TextBox x:Name="carBrand_tb" Grid.Row="0" Grid.Column="1"></TextBox>
+
+                            <Label Grid.Row="1" Grid.Column="0">Модель</Label>
+                            <TextBox x:Name="carModel_tb" Grid.Row="1" Grid.Column="1"></TextBox>
+
+                            <Label Grid.Row="2" Grid.Column="0">№ автомобиля</Label>
+                            <TextBox x:Name="carNumber_tb" Grid.Row="2" Grid.Column="1"></TextBox>
+
+                            <Label Grid.Row="3" Grid.Column="0">Класс</Label>
+                            <ComboBox x:Name="classCar_cb" Grid.Row="3" Grid.Column="1"></ComboBox>
+
+                            <Button x:Name="applyCarFilter_btn" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Height="30" Click="applyCarFilter_btn_Click">Применить фильтр</Button>
+                        </Grid>
+                        
+                        <DataGrid x:Name="dataGridCars" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top" Width="776" Height="340">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Марка" Binding="{Binding Path=Brand}" Width="100" />
+                                <DataGridTextColumn Header="Модель"  Binding="{Binding Path=Model}" Width="100" />
+                                <DataGridTextColumn Header="Цвет" Binding="{Binding Path=Colour}" Width="100" />
+                                <DataGridTextColumn Header="Номер" Binding="{Binding Path=Number}" Width="100" />
+                                <DataGridTextColumn Header="Класс" Binding="{Binding Path=CarClass}" Width="100" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
                 </TabItem>
             </TabControl>
 

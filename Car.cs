@@ -10,7 +10,7 @@ namespace ESOperatorTaxi
     /// <summary>
     /// Перечисление, характеризующее класс автомобиля
     /// </summary>
-    enum CarClass 
+    public enum CarClass 
     {
         Econom = 1,
         Comfort,
@@ -18,7 +18,7 @@ namespace ESOperatorTaxi
     }
 
     [Table("cars")]
-    class Car:Entity
+    class Car :Entity
     {
         private string brand;
         private string model;

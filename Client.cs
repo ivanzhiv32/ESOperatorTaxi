@@ -14,7 +14,7 @@ namespace ESOperatorTaxi
         private string name;
         private string patronymic;
         private string surname;
-        private decimal phoneNumber;
+        private Int64 phoneNumber;
 
         [Column("Name")]
         public string Name { get => name; set => Set(ref name, value); }
@@ -26,7 +26,7 @@ namespace ESOperatorTaxi
         public string Surname { get => surname; set => Set(ref surname, value); }
 
         [Column("PhoneNumber")]
-        public decimal PhoneNumber { get => phoneNumber; set => Set(ref phoneNumber, value); }
+        public Int64 PhoneNumber { get => phoneNumber; set => Set(ref phoneNumber, value); }
 
     }
 }

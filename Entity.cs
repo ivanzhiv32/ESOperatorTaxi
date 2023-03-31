@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ESOperatorTaxi
 {
-    abstract class Entity : INotifyPropertyChanged
+    public abstract class Entity : INotifyPropertyChanged
     {
         private int id;
         [Column("ID")]
