@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+
 
 namespace ESOperatorTaxi
 {
@@ -64,14 +68,21 @@ namespace ESOperatorTaxi
             finishStreet_tb.Text = order.FinishStreet.Name;
             finishHouseNumber_tb.Text = Convert.ToString(order.FinishHouseNumber);
             finishEntranseNumber_tb.Text = Convert.ToString(order.FinishEntranseNumber);
+
+            
+            
         }
 
         private void carClass_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             dataGridSuitableDrivers.Items.Clear();
+
             foreach (Driver driver in dbManager.Drivers)
             {
-                if(driver.IsFree == true && driver.Car.CarClass == (CarClass)carClass_cb.SelectedItem) dataGridSuitableDrivers.Items.Add(driver);
+                if (driver.IsFree == true && driver.Car.CarClass == (CarClass)carClass_cb.SelectedItem)
+                {
+                    dataGridSuitableDrivers.Items.Add(driver);
+                }
             }
         }
 
@@ -199,6 +210,13 @@ namespace ESOperatorTaxi
 
             dbManager.Update<Order>(order);
             Close();
+        }
+
+        private void distance_btn_Click(object sender, RoutedEventArgs e)
+        {
+            foreach(DataGridRow row in dataGridSuitableDrivers.Items)
+            {
+            }
         }
     }
 }

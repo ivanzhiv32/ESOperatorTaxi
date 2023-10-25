@@ -42,6 +42,7 @@ namespace ESOperatorTaxi
         private void addDriver_btn_Click(object sender, RoutedEventArgs e)
         {
             Driver driver = new Driver();
+
             try
             {
                 driver.Surname = surname_tb.Text;
@@ -53,6 +54,7 @@ namespace ESOperatorTaxi
                     MessageBox.Show("Автомобиль с таким номером не найден.\nДобавьте новый автомобиль");
                     CarWindow carWindow = new CarWindow(dbManager);
                     carWindow.number_tb.Text = car_tb.Text;
+                    carWindow.addCar_btn.Visibility = Visibility.Visible;
                     carWindow.Show();
                     return;
                 }

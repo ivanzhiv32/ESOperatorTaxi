@@ -28,7 +28,8 @@ namespace ESOperatorTaxi
 
         public DbManager() 
         {
-            dbConnection = new MySqlConnection("server=s2.kts.tu-bryansk.ru;port=3306;user=IAS18.ZHivII;database=IAS18_ZHivII;password=3q%Md=Q2/4;");
+            //dbConnection = new MySqlConnection("server=s2.kts.tu-bryansk.ru;port=3306;user=IAS18.ZHivII;database=IAS18_ZHivII;password=3q%Md=Q2/4;");
+            dbConnection = new MySqlConnection("server=127.0.0.1;port=3306;username=root;password=dgiva4444;database=taxi");
 
             Clients = new ReadOnlyObservableCollection<Client>(clients);
             Cars = new ReadOnlyObservableCollection<Car>(cars);

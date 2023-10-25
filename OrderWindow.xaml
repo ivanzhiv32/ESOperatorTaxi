@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ESOperatorTaxi"
         mc:Ignorable="d"
-        Title="Создание заказ" Height="365.361" Width="678.682">
+        Title="Создание заказ" Height="400.361" Width="678.682">
     <StackPanel Orientation="Horizontal">
         <Grid>
             <Grid.RowDefinitions >
+                <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -61,12 +62,13 @@
             <TextBox x:Name="finishEntranseNumber_tb" Margin="2" Grid.Column="1" Grid.Row="12"></TextBox>
             <Button x:Name="create_btn" Visibility="Hidden" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="2" Width="200" Margin="2" Click="create_btn_Click">Добавить заказ</Button>
             <Button x:Name="change_btn" Visibility="Hidden" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="2" Width="200" Margin="2" Click="change_btn_Click">Изменить заказ</Button>
+            <Button x:Name="distance_btn" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="2" Width="200" Margin="2" Click="distance_btn_Click">Расстояние</Button>
         </Grid>
         <StackPanel Orientation="Vertical">
             <Label HorizontalAlignment="Center">Подходящие водители</Label>
             <DataGrid x:Name="dataGridSuitableDrivers" HorizontalAlignment="Left" Margin="2" VerticalAlignment="Top" Height="250" Width="415" SelectionChanged="dataGridAddDrivers_SelectionChanged">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Расстояние" Binding="{Binding Path=Patronymic}" Width="80" />
+                    <DataGridTextColumn Header="Расстояние" Binding="{Binding Path=Patronymic}" Width="80" x:Name="distanse"/>
                     <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Surname}" Width="100"/>
                     <DataGridTextColumn Header="Класс авто"  Binding="{Binding Path=Car.CarClass}" Width="90" />
                     <DataGridTextColumn Header="Тел. номер" Binding="{Binding Path=PhoneNumber}" Width="120" />

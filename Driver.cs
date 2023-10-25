@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace ESOperatorTaxi
 {
@@ -37,6 +39,23 @@ namespace ESOperatorTaxi
             }}
         [Column("PhoneNumber")]
         public Int64 PhoneNumber { get => phoneNumber; set => Set(ref phoneNumber, value); }
+
+        public Geopoint GetLocation()
+        {
+            List<string> streets = new List<string>();
+
+            StreamReader sr = new StreamReader("streets.json", Encoding.UTF8);
+
+            var text = sr.ReadToEnd();
+            string pattern = @"""(\w*)""";
+            foreach (Match match in Regex.Matches(text, pattern, RegexOptions.IgnoreCase))
+            {
+                streets.Add(match.Groups[1].Value);
+            }
+            Random rnd = new Random();
+            Geopoint geopoint = new Geopoint("Брянск", streets[rnd.Next(0,  streets.Count)], rnd.Next(1, 100));
+            return geopoint;
+        }
         
     }
 }

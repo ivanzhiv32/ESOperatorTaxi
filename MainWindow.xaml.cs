@@ -186,7 +186,7 @@ namespace ESOperatorTaxi
         {
             DriverWindow driverWindow = new DriverWindow(dbManager);
             driverWindow.Title = "Добавление водителя";
-            driverWindow.changeDataDriver_btn.Visibility = Visibility.Visible;
+            driverWindow.addDriver_btn.Visibility = Visibility.Visible;
             driverWindow.Show();
         }
 
