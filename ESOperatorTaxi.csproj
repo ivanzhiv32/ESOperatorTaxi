@@ -107,6 +107,7 @@
     </Compile>
     <Compile Include="Geopoint.cs" />
     <Compile Include="MainClass.cs" />
+    <Compile Include="OperatorService.cs" />
     <Compile Include="OrderWindow.xaml.cs">
       <DependentUpon>OrderWindow.xaml</DependentUpon>
     </Compile>
@@ -114,6 +115,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Review.cs" />
     <Compile Include="Street.cs" />
+    <Compile Include="PriceRule.cs" />
     <Compile Include="TripTicket.cs" />
     <Page Include="CarWindow.xaml">
       <SubType>Designer</SubType>
