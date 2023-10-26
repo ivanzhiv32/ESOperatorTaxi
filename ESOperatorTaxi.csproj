@@ -101,7 +101,9 @@
     <Compile Include="ClientWindow.xaml.cs">
       <DependentUpon>ClientWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DegreeCompliance.cs" />
     <Compile Include="DriverRating.cs" />
+    <Compile Include="DriverSelectionRule.cs" />
     <Compile Include="DriverWindow.xaml.cs">
       <DependentUpon>DriverWindow.xaml</DependentUpon>
     </Compile>
