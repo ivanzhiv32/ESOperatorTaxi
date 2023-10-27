@@ -25,6 +25,8 @@ namespace ESOperatorTaxi
         private ObservableCollection<DriverRating> driverRatings = new ObservableCollection<DriverRating>();
         private ObservableCollection<City> cities = new ObservableCollection<City>();
         private ObservableCollection<Street> streets = new ObservableCollection<Street>();
+        private ObservableCollection<DriverSelectionRule> driverSelectionRules = new ObservableCollection<DriverSelectionRule>();
+        private ObservableCollection<PriceRule> priceRules = new ObservableCollection<PriceRule>();
 
         public DbManager() 
         {
