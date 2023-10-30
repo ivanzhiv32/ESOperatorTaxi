@@ -1,0 +1,51 @@
+﻿<Window x:Class="ESOperatorTaxi.DriverRuleWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ESOperatorTaxi"
+        mc:Ignorable="d"
+        Title="DriverRuleWindow" Height="198.327" Width="277.353">
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0">Дистанция до адреса</Label>
+        <TextBox x:Name="distance_tb" Grid.Row="0" Grid.Column="1"></TextBox>
+
+        <Label Grid.Row="1" Grid.Column="0">Рейтинг водителя</Label>
+        <TextBox x:Name="rating_tb" Grid.Row="1" Grid.Column="1"></TextBox>
+
+        <Label Grid.Row="2" Grid.Column="0">Класс заказа</Label>
+        <ComboBox x:Name="classOrder_cb" Margin="3" Grid.Row="2" Grid.Column="1"></ComboBox>
+
+        <Label Grid.Row="3" Grid.Column="0">Класс автомобиля</Label>
+        <ComboBox x:Name="classCar_cb" Margin="3" Grid.Row="3" Grid.Column="1"></ComboBox>
+
+        <Label Grid.Row="4" Grid.Column="0">Степень соответствия</Label>
+        <ComboBox x:Name="degreeCompliance_cb" Margin="3" Grid.Row="4" Grid.Column="1"></ComboBox>
+
+        <Button x:Name="addDriverRuleWindow_btn" Click="addDriverRuleWindow_btn_Click" Visibility="Hidden" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="2">Добавить правило</Button>
+        <Button x:Name="changeDriverRuleWindow_btn" Click="changeDriverRuleWindow_btn_Click" Visibility="Hidden" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="2">Изменить правило</Button>
+    </Grid>
+</Window>

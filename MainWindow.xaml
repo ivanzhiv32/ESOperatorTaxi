@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ESOperatorTaxi"
         mc:Ignorable="d"
+        x:Name="mainWindow"
         Title="MainWindow" Height="600" Width="800">
     <Window.Resources>
         <Style TargetType="ComboBox">
@@ -48,7 +49,7 @@
                                 Изменить
                             </Button>
                             <Separator />
-                            <Button x:Name="updateOrder_btn" Click="updateOrder_btn_Click">
+                            <Button x:Name="updateOrder_btn" Click="updateOrder_btn_Click" Margin="0,0,0,0.4" VerticalAlignment="Bottom">
                                 Обновить
                             </Button>
                             <Separator />
@@ -153,9 +154,11 @@
                         <ToolBar HorizontalAlignment="Left" Height="27" Margin="1" VerticalAlignment="Top" Width="788">
                             <Button x:Name="addCar_btn" Click="addCar_btn_Click">Добавить</Button>
                             <Separator />
-                            <Button x:Name="delCar_btn">Удалить</Button>
+                            <Button x:Name="delCar_btn" Click="delCar_btn_Click">Удалить</Button>
                             <Separator />
                             <Button x:Name="changeCar_btn" Click="changeCar_btn_Click">Изменить</Button>
+                            <Separator />
+                            
                         </ToolBar>
 
                         <Grid Margin="10 5">
@@ -185,7 +188,7 @@
 
                             <Button x:Name="applyCarFilter_btn" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Height="30" Click="applyCarFilter_btn_Click">Применить фильтр</Button>
                         </Grid>
-                        
+
                         <DataGrid x:Name="dataGridCars" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top" Width="776" Height="340">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Марка" Binding="{Binding Path=Brand}" Width="100" />
@@ -193,6 +196,90 @@
                                 <DataGridTextColumn Header="Цвет" Binding="{Binding Path=Colour}" Width="100" />
                                 <DataGridTextColumn Header="Номер" Binding="{Binding Path=Number}" Width="100" />
                                 <DataGridTextColumn Header="Класс" Binding="{Binding Path=CarClass}" Width="100" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem>
+                
+                <TabItem x:Name="TabDriverRules" Header="Правила водителя">
+                    <StackPanel Orientation="Vertical">
+
+                        <ToolBar HorizontalAlignment="Left" Height="27" Margin="1" VerticalAlignment="Top" Width="788">
+                            <Button x:Name="addDriverRule_btn" Click="addDriverRule_btn_Click">Добавить</Button>
+                            <Separator />
+                            <Button x:Name="delDriverRule_btn" Click="delDriverRule_btn_Click">Удалить</Button>
+                            <Separator />
+                            <Button x:Name="changeDriverRule_btn" Click="changeDriverRule_btn_Click">Изменить</Button>
+                            <Separator />
+                            <Button x:Name="updateDriverRule_btn" Margin="0,0,0,0.4" VerticalAlignment="Bottom" Click="updateDriverRule_btn_Click">Обновить</Button>
+                            <Separator />
+                        </ToolBar>
+                        
+                        <!--<Grid Margin="10 5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"></ColumnDefinition>
+                                <ColumnDefinition Width="150"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0">Дистанция до адреса</Label>
+                            <TextBox x:Name="distance_tb" Grid.Row="0" Grid.Column="1"></TextBox>
+
+                            <Label Grid.Row="1" Grid.Column="0">Рейтинг водителя</Label>
+                            <TextBox x:Name="rating_tb" Grid.Row="1" Grid.Column="1"></TextBox>
+
+                            <Label Grid.Row="2" Grid.Column="0">Класс заказа</Label>
+                            <ComboBox x:Name="classOrderRule_cb" Margin="3" Grid.Row="2" Grid.Column="1"></ComboBox>
+
+                            <Label Grid.Row="3" Grid.Column="0">Класс автомобиля</Label>
+                            <ComboBox x:Name="classCarRule_cb" Margin="3" Grid.Row="3" Grid.Column="1"></ComboBox>
+
+                            <Label Grid.Row="4" Grid.Column="0">Степень соответствия</Label>
+                            <ComboBox x:Name="degreeCompliance_cb" Margin="3" Grid.Row="4" Grid.Column="1"></ComboBox>
+
+                            <Button x:Name="addDriverRule1_btn" Visibility="Visible" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Click="addDriverRule_btn_Click">Добавить правило</Button>
+
+                        </Grid>-->
+
+                        <DataGrid x:Name="dataGridDriverRules" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top" Width="776" Height="340">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Дистанция" Binding="{Binding Path=MaxDistanceToStartAddress}" Width="100" />
+                                <DataGridTextColumn Header="Рейтинг"  Binding="{Binding Path=MinDriverRating}" Width="100" />
+                                <DataGridTextColumn Header="Класс заказа" Binding="{Binding Path=OrderClass}" Width="100" />
+                                <DataGridTextColumn Header="Класс автомобиля" Binding="{Binding Path=CarClass}" Width="120" />
+                                <DataGridTextColumn Header="Степень соответствия" Binding="{Binding Path=DegreeCompliance}" Width="140" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem>
+                
+                <TabItem x:Name="TabPriceRules" Header="Правила цены">
+                    <StackPanel Orientation="Vertical">
+                        <ToolBar HorizontalAlignment="Left" Height="27" Margin="1" VerticalAlignment="Top" Width="788">
+                            <Button x:Name="addPriceRule_btn" Click="addPriceRule_btn_Click">Добавить</Button>
+                            <Separator />
+                            <Button x:Name="delPriceRule_btn" Click="delPriceRule_btn_Click">Удалить</Button>
+                            <Separator />
+                            <Button x:Name="changePriceRule_btn" Click="changePriceRule_btn_Click">Изменить</Button>
+                            <Separator />
+                            <Button x:Name="updatePriceRule_btn" Click="updatePriceRule_btn_Click">Обновить</Button>
+                            <Separator />
+                        </ToolBar>
+                        
+                        <DataGrid x:Name="dataGridPriceRules" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top" Width="776" Height="340">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Начало промежутка" Binding="{Binding Path=StartRange}" Width="130" />
+                                <DataGridTextColumn Header="Конец промежутка"  Binding="{Binding Path=EndRange}" Width="130" />
+                                <DataGridTextColumn Header="Класс заказа" Binding="{Binding Path=OrderClass}" Width="100" />
+                                <DataGridTextColumn Header="Цена за км" Binding="{Binding Path=PricePerKm}" Width="80" />
+                                <DataGridTextColumn Header="Посадка (руб)" Binding="{Binding Path=Boarding}" Width="100" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>

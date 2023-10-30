@@ -42,6 +42,8 @@ namespace ESOperatorTaxi
             DriverRatings = new ReadOnlyObservableCollection<DriverRating>(driverRatings);
             Cities = new ReadOnlyObservableCollection<City>(cities);
             Streets = new ReadOnlyObservableCollection<Street>(streets);
+            DriverSelectionRules = new ReadOnlyObservableCollection<DriverSelectionRule>(driverSelectionRules);
+            PriceRules = new ReadOnlyObservableCollection<PriceRule>(priceRules);
         }
 
         public ReadOnlyObservableCollection<Client> Clients { get; private set; }
@@ -53,6 +55,8 @@ namespace ESOperatorTaxi
         public ReadOnlyObservableCollection<DriverRating> DriverRatings { get; private set; }
         public ReadOnlyObservableCollection<City> Cities { get; private set; }
         public ReadOnlyObservableCollection<Street> Streets { get; private set; }
+        public ReadOnlyObservableCollection<DriverSelectionRule> DriverSelectionRules { get; private set; }
+        public ReadOnlyObservableCollection<PriceRule> PriceRules { get; private set; }
 
         /// <summary>
         /// Найти коллекцию сущностей по типу
@@ -81,6 +85,10 @@ namespace ESOperatorTaxi
                     return cities;
                 case nameof(Street):
                     return streets;
+                case nameof(DriverSelectionRule):
+                    return driverSelectionRules;
+                case nameof(PriceRule):
+                    return priceRules;
                 default:
                     return null;
             }
@@ -214,6 +222,12 @@ namespace ESOperatorTaxi
             {
                 review.Order = orders.FirstOrDefault(c => c.Id == review.OrderId);
             }
+
+            var loadedDriverRules = LoadEntities<DriverSelectionRule>();
+            driverSelectionRules.ClearAndAddRange(loadedDriverRules);
+
+            var loadedPriceRules = LoadEntities<PriceRule>();
+            priceRules.ClearAndAddRange(loadedPriceRules);
         }
 
         public void Add<T>(T entity) where T : Entity 

@@ -9,21 +9,21 @@ namespace ESOperatorTaxi
     [Table("price_rules")]
     class PriceRule : Entity
     {
-        private uint startRange;
-        private uint endRange;
+        private int startRange;
+        private int endRange;
         private OrderClass orderClass;
         private decimal pricePerKm;
-        private uint boarding;
+        private int boarding;
 
         [Column("StartRange")]
-        public uint StartRange { get => startRange; set => Set(ref startRange, value); }
+        public int StartRange { get => startRange; set => Set(ref startRange, value); }
         [Column("EndRange")]
-        public uint EndRange { get => endRange; set => Set(ref endRange, value); }
+        public int EndRange { get => endRange; set => Set(ref endRange, value); }
         [Column("OrderClassId")]
         public OrderClass OrderClass { get => orderClass; set => Set(ref orderClass, value); }
         [Column("PricePerKm")]
         public decimal PricePerKm { get => pricePerKm; set => Set(ref pricePerKm, value); }
         [Column("Boarding")]
-        public uint Boarding { get => boarding; set => Set(ref boarding, value); }
+        public int Boarding { get => boarding; set => Set(ref boarding, value); }
     }
 }

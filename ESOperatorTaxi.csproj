@@ -103,6 +103,9 @@
     </Compile>
     <Compile Include="DegreeCompliance.cs" />
     <Compile Include="DriverRating.cs" />
+    <Compile Include="DriverRuleWindow.xaml.cs">
+      <DependentUpon>DriverRuleWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DriverSelectionRule.cs" />
     <Compile Include="DriverWindow.xaml.cs">
       <DependentUpon>DriverWindow.xaml</DependentUpon>
@@ -115,6 +118,9 @@
     </Compile>
     <Compile Include="City.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="PriceRuleWindow.xaml.cs">
+      <DependentUpon>PriceRuleWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Review.cs" />
     <Compile Include="Street.cs" />
     <Compile Include="PriceRule.cs" />
@@ -124,6 +130,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ClientWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DriverRuleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -152,6 +162,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PriceRuleWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Order.cs" />

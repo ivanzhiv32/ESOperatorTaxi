@@ -14,16 +14,16 @@ namespace ESOperatorTaxi
     [Table("driver_selection_rule")]
     class DriverSelectionRule : Entity
     {
-        private uint maxDistanceToStartAddress;
-        private uint minDriverRating;
+        private int maxDistanceToStartAddress;
+        private int minDriverRating;
         private OrderClass orderClass;
         private CarClass carClass;
         private DegreeCompliance degreeCompliance;
 
         [Column("MaxDistanceToStartAddress")]
-        public uint MaxDistanceToStartAddress { get => maxDistanceToStartAddress; set => Set(ref maxDistanceToStartAddress, value); }
+        public int MaxDistanceToStartAddress { get => maxDistanceToStartAddress; set => Set(ref maxDistanceToStartAddress, value); }
         [Column("MinDriverRating")]
-        public uint MinDriverRating { get => minDriverRating; set => Set(ref minDriverRating, value); }
+        public int MinDriverRating { get => minDriverRating; set => Set(ref minDriverRating, value); }
         [Column("OrderClassId")]
         public OrderClass OrderClass { get => orderClass; set => Set(ref orderClass, value); }
         [Column("CarClassId")]

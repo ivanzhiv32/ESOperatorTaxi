@@ -20,14 +20,21 @@ namespace ESOperatorTaxi
 {
     public partial class MainWindow : Window
     {
-        internal DbManager dbManager = new DbManager();
+        internal DbManager DbManager
+        {
+            get => dbManager;
+        }
+        private DbManager dbManager = new DbManager();
+        internal static readonly OperatorService operatorService;
         public MainWindow()
         {
             InitializeComponent();
             
             dbManager.Load();
-            
+
+            //operatorService = new OperatorService();
         }
+
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -89,6 +96,40 @@ namespace ESOperatorTaxi
                 classCar_cb.Items.Add(CarClass.Econom);
                 classCar_cb.Items.Add(CarClass.Comfort);
                 classCar_cb.Items.Add(CarClass.Business);
+            }
+            else if (selectedTab.Name == "TabDriverRules")
+            {
+                dataGridDriverRules.Items.Clear();
+                foreach(DriverSelectionRule rule in dbManager.DriverSelectionRules)
+                {
+                    dataGridDriverRules.Items.Add(rule);
+                }
+
+                //classOrderRule_cb.Items.Clear();
+                //classOrderRule_cb.Items.Add("Не выбрано");
+                //classOrderRule_cb.Items.Add(OrderClass.Econom);
+                //classOrderRule_cb.Items.Add(OrderClass.Comfort);
+                //classOrderRule_cb.Items.Add(OrderClass.Business);
+
+                //classOrderRule_cb.Items.Clear();
+                //classOrderRule_cb.Items.Add("Не выбрано");
+                //classOrderRule_cb.Items.Add(CarClass.Econom);
+                //classOrderRule_cb.Items.Add(CarClass.Comfort);
+                //classOrderRule_cb.Items.Add(CarClass.Business);
+
+                //degreeCompliance_cb.Items.Clear();
+                //degreeCompliance_cb.Items.Add("Не выбрано");
+                //degreeCompliance_cb.Items.Add(DegreeCompliance.One);
+                //degreeCompliance_cb.Items.Add(DegreeCompliance.Two);
+                //degreeCompliance_cb.Items.Add(DegreeCompliance.Three);
+            }
+            else if (selectedTab.Name == "TabPriceRules")
+            {
+                dataGridPriceRules.Items.Clear();
+                foreach (PriceRule rule in dbManager.PriceRules)
+                {
+                    dataGridPriceRules.Items.Add(rule);
+                }
             }
         }
 
@@ -369,6 +410,115 @@ namespace ESOperatorTaxi
             }
         }
 
-        
+        private void addDriverRule_btn_Click(object sender, RoutedEventArgs e)
+        {
+            DriverRuleWindow driverRuleWindow = new DriverRuleWindow(dbManager);
+            driverRuleWindow.Title = "Создание правила";
+            driverRuleWindow.addDriverRuleWindow_btn.Visibility = Visibility.Visible;
+            driverRuleWindow.changeDriverRuleWindow_btn.Visibility = Visibility.Hidden;
+            driverRuleWindow.Show();
+        }
+
+        private void delDriverRule_btn_Click(object sender, RoutedEventArgs e)
+        {
+            DriverSelectionRule rule = (DriverSelectionRule)dataGridDriverRules.SelectedItem;
+            if (rule == null)
+            {
+                MessageBox.Show("Выберите правило из таблицы");
+                return;
+            }
+
+            dbManager.Delete<DriverSelectionRule>(rule);
+            dataGridDriverRules.Items.Remove(rule);
+        }
+
+        private void changeDriverRule_btn_Click(object sender, RoutedEventArgs e)
+        {
+            DriverSelectionRule rule = (DriverSelectionRule)dataGridDriverRules.SelectedItem;
+            if (rule == null)
+            {
+                MessageBox.Show("Выберите правило из таблицы");
+                return;
+            }
+
+            DriverRuleWindow driverRuleWindow = new DriverRuleWindow(dbManager, rule);
+            driverRuleWindow.Title = "Изменение правила";
+            driverRuleWindow.distance_tb.Text = rule.MaxDistanceToStartAddress.ToString();
+            driverRuleWindow.rating_tb.Text = rule.MinDriverRating.ToString();
+            driverRuleWindow.classOrder_cb.SelectedItem = rule.OrderClass;
+            driverRuleWindow.classCar_cb.SelectedItem = rule.CarClass;
+            driverRuleWindow.degreeCompliance_cb.SelectedItem = rule.DegreeCompliance;
+
+            driverRuleWindow.addDriverRuleWindow_btn.Visibility = Visibility.Hidden;
+            driverRuleWindow.changeDriverRuleWindow_btn.Visibility = Visibility.Visible;
+            driverRuleWindow.Show();
+        }
+
+        private void delCar_btn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void updateDriverRule_btn_Click(object sender, RoutedEventArgs e)
+        {
+            dataGridDriverRules.Items.Clear();
+            foreach (DriverSelectionRule rule in dbManager.DriverSelectionRules)
+            {
+                dataGridDriverRules.Items.Add(rule);
+            }
+        }
+
+        private void addPriceRule_btn_Click(object sender, RoutedEventArgs e)
+        {
+            PriceRuleWindow priceRuleWindow = new PriceRuleWindow(dbManager);
+            priceRuleWindow.Title = "Создание правила";
+            priceRuleWindow.addPriceRuleWindow_btn.Visibility = Visibility.Visible;
+            priceRuleWindow.changePriceRuleWindow_btn.Visibility = Visibility.Hidden;
+            priceRuleWindow.Show();
+        }
+
+        private void delPriceRule_btn_Click(object sender, RoutedEventArgs e)
+        {
+            PriceRule rule = (PriceRule)dataGridPriceRules.SelectedItem;
+            if (rule == null)
+            {
+                MessageBox.Show("Выберите правило из таблицы");
+                return;
+            }
+
+            dbManager.Delete(rule);
+            dataGridPriceRules.Items.Remove(rule);
+        }
+
+        private void changePriceRule_btn_Click(object sender, RoutedEventArgs e)
+        {
+            PriceRule rule = (PriceRule)dataGridPriceRules.SelectedItem;
+            if (rule == null)
+            {
+                MessageBox.Show("Выберите правило из таблицы");
+                return;
+            }
+
+            PriceRuleWindow priceRuleWindow = new PriceRuleWindow(dbManager, rule);
+            priceRuleWindow.startRange_tb.Text = Convert.ToString(rule.StartRange);
+            priceRuleWindow.endRange_tb.Text = Convert.ToString(rule.EndRange);
+            priceRuleWindow.classOrder_cb.SelectedItem = (OrderClass)rule.OrderClass;
+            priceRuleWindow.pricePerKm_tb.Text = Convert.ToString(rule.PricePerKm);
+            priceRuleWindow.boarding_tb.Text = Convert.ToString(rule.Boarding);
+
+            priceRuleWindow.addPriceRuleWindow_btn.Visibility = Visibility.Hidden;
+            priceRuleWindow.changePriceRuleWindow_btn.Visibility = Visibility.Visible;
+            priceRuleWindow.Show();
+        }
+
+        private void updatePriceRule_btn_Click(object sender, RoutedEventArgs e)
+        {
+            dataGridPriceRules.Items.Clear();
+
+            foreach (PriceRule rule in dbManager.PriceRules)
+            {
+                dataGridPriceRules.Items.Add(rule);
+            }
+        }
     }
 }
