@@ -95,53 +95,53 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CarWindow.xaml.cs">
+    <Compile Include="Windows\CarWindow.xaml.cs">
       <DependentUpon>CarWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ClientWindow.xaml.cs">
+    <Compile Include="Windows\ClientWindow.xaml.cs">
       <DependentUpon>ClientWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="DegreeCompliance.cs" />
     <Compile Include="DriverRating.cs" />
-    <Compile Include="DriverRuleWindow.xaml.cs">
+    <Compile Include="Windows\DriverRuleWindow.xaml.cs">
       <DependentUpon>DriverRuleWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="DriverSelectionRule.cs" />
-    <Compile Include="DriverWindow.xaml.cs">
+    <Compile Include="Windows\DriverWindow.xaml.cs">
       <DependentUpon>DriverWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Geopoint.cs" />
     <Compile Include="MainClass.cs" />
     <Compile Include="OperatorService.cs" />
-    <Compile Include="OrderWindow.xaml.cs">
+    <Compile Include="Windows\OrderWindow.xaml.cs">
       <DependentUpon>OrderWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="City.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="PriceRuleWindow.xaml.cs">
+    <Compile Include="Windows\PriceRuleWindow.xaml.cs">
       <DependentUpon>PriceRuleWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Review.cs" />
     <Compile Include="Street.cs" />
     <Compile Include="PriceRule.cs" />
     <Compile Include="TripTicket.cs" />
-    <Page Include="CarWindow.xaml">
+    <Page Include="Windows\CarWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ClientWindow.xaml">
+    <Page Include="Windows\ClientWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DriverRuleWindow.xaml">
+    <Page Include="Windows\DriverRuleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DriverWindow.xaml">
+    <Page Include="Windows\DriverWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="OrderWindow.xaml">
+    <Page Include="Windows\OrderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -162,7 +162,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PriceRuleWindow.xaml">
+    <Page Include="Windows\PriceRuleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

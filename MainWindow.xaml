@@ -248,7 +248,7 @@
 
                         </Grid>-->
 
-                        <DataGrid x:Name="dataGridDriverRules" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top" Width="776" Height="340">
+                        <DataGrid x:Name="dataGridDriverRules" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top" Width="776" Height="503" Margin="6,0">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Дистанция" Binding="{Binding Path=MaxDistanceToStartAddress}" Width="100" />
                                 <DataGridTextColumn Header="Рейтинг"  Binding="{Binding Path=MinDriverRating}" Width="100" />

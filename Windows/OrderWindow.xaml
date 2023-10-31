@@ -47,17 +47,17 @@
 
             <Label HorizontalAlignment="Center" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">Адрес подачи</Label>
             <Label Grid.Column="0" Grid.Row="6">Улица</Label>
-            <TextBox x:Name="startStreet_tb" Margin="2" Grid.Column="1" Grid.Row="6"></TextBox>
+            <TextBox Text="Чайковского" x:Name="startStreet_tb" Margin="2" Grid.Column="1" Grid.Row="6"></TextBox>
             <Label Grid.Column="0" Grid.Row="7">Номер дома</Label>
-            <TextBox x:Name="startHouseNumber_tb" Margin="2" Grid.Column="1" Grid.Row="7"></TextBox>
+            <TextBox Text="52" x:Name="startHouseNumber_tb" Margin="2" Grid.Column="1" Grid.Row="7"></TextBox>
             <Label Grid.Column="0" Grid.Row="8">Номер подъезда</Label>
             <TextBox x:Name="startEntranseNumber_tb" Margin="2" Grid.Column="1" Grid.Row="8"></TextBox>
 
             <Label HorizontalAlignment="Center" Grid.Column="0" Grid.Row="9" Grid.ColumnSpan="2">Адрес назначения</Label>
             <Label Grid.Column="0" Grid.Row="10">Улица</Label>
-            <TextBox x:Name="finishStreet_tb" Margin="2" Grid.Column="1" Grid.Row="10"></TextBox>
+            <TextBox Text="Куйбышева" x:Name="finishStreet_tb" Margin="2" Grid.Column="1" Grid.Row="10"></TextBox>
             <Label Grid.Column="0" Grid.Row="11">Номер дома</Label>
-            <TextBox x:Name="finishHouseNumber_tb" Margin="2" Grid.Column="1" Grid.Row="11"></TextBox>
+            <TextBox Text="20" x:Name="finishHouseNumber_tb" Margin="2" Grid.Column="1" Grid.Row="11"></TextBox>
             <Label Grid.Column="0" Grid.Row="12">Номер подъезда</Label>
             <TextBox x:Name="finishEntranseNumber_tb" Margin="2" Grid.Column="1" Grid.Row="12"></TextBox>
             <Button x:Name="create_btn" Visibility="Hidden" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="2" Width="200" Margin="2" Click="create_btn_Click">Добавить заказ</Button>
@@ -68,7 +68,7 @@
             <Label HorizontalAlignment="Center">Подходящие водители</Label>
             <DataGrid x:Name="dataGridSuitableDrivers" HorizontalAlignment="Left" Margin="2" VerticalAlignment="Top" Height="250" Width="415" SelectionChanged="dataGridAddDrivers_SelectionChanged">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Расстояние" Binding="{Binding Path=Patronymic}" Width="80" x:Name="distanse"/>
+                    <DataGridTextColumn Header="Расстояние" Width="80" x:Name="distanse"/>
                     <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Surname}" Width="100"/>
                     <DataGridTextColumn Header="Класс авто"  Binding="{Binding Path=Car.CarClass}" Width="90" />
                     <DataGridTextColumn Header="Тел. номер" Binding="{Binding Path=PhoneNumber}" Width="120" />
@@ -76,11 +76,11 @@
             </DataGrid>
             <StackPanel Orientation="Horizontal">
                 <Label >Определить водителя автоматически</Label>
-                <CheckBox Margin="15 0 0 0" VerticalAlignment="Center"></CheckBox>
+                <CheckBox x:Name="autoSelectDriver_checkBox" Checked="autoSelectDriver_checkBox_Checked" Margin="15 0 0 0" VerticalAlignment="Center"></CheckBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label >Определить цену автоматически</Label>
-                <CheckBox Margin="39 0 0 0" VerticalAlignment="Center"></CheckBox>
+                <CheckBox x:Name="autoSelectPrice_checkBox" Checked="autoSelectPrice_checkBox_Checked" Margin="39 0 0 0" VerticalAlignment="Center"></CheckBox>
             </StackPanel>
         </StackPanel>
 

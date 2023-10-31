@@ -25,14 +25,15 @@ namespace ESOperatorTaxi
             get => dbManager;
         }
         private DbManager dbManager = new DbManager();
-        internal static readonly OperatorService operatorService;
+        OperatorService operatorService;
+        
         public MainWindow()
         {
             InitializeComponent();
             
             dbManager.Load();
 
-            //operatorService = new OperatorService();
+            this.operatorService = new OperatorService(dbManager.PriceRules, dbManager.DriverSelectionRules, dbManager.Drivers, dbManager.DriverRatings);
         }
 
 
@@ -135,7 +136,7 @@ namespace ESOperatorTaxi
 
         private void addOrder_btn_Click(object sender, RoutedEventArgs e)
         {
-            OrderWindow orderWindow = new OrderWindow(dbManager);
+            OrderWindow orderWindow = new OrderWindow(dbManager, operatorService);
             orderWindow.Title = "Создание заказа";
             orderWindow.create_btn.Visibility = Visibility.Visible;
             orderWindow.Show();
@@ -164,7 +165,7 @@ namespace ESOperatorTaxi
                 return;
             }
 
-            OrderWindow orderWindow = new OrderWindow(dbManager, order);
+            OrderWindow orderWindow = new OrderWindow(dbManager, operatorService, order);
             orderWindow.Title = "Изменение заказа";
             orderWindow.change_btn.Visibility = Visibility.Visible;
 
@@ -456,7 +457,14 @@ namespace ESOperatorTaxi
 
         private void delCar_btn_Click(object sender, RoutedEventArgs e)
         {
-
+            Car car = (Car)dataGridCars.SelectedItem;
+            if (car == null)
+            {
+                MessageBox.Show("Выберите автомобиль из таблицы");
+                return;
+            }
+            dbManager.Delete(car);
+            dataGridCars.Items.Remove(car);
         }
 
         private void updateDriverRule_btn_Click(object sender, RoutedEventArgs e)

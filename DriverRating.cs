@@ -17,7 +17,7 @@ namespace ESOperatorTaxi
 
         [Column("Rating")]
         public double Rating { get => rating; set => Set(ref rating, value); }
-        [Column("DateTime")]
+        [Column("Date")]
         public DateTime Date { get => date; set => Set(ref date, value); }
         [Column("IdDriver")]
         public int IdDriver { get => idDriver; set => Set(ref idDriver, value); }

@@ -22,6 +22,10 @@ namespace ESOperatorTaxi
         /// <summary>
         /// Третья степень (плохо)
         /// </summary>
-        Three
+        Three,
+        /// <summary>
+        /// Четвертая степень (недопустимо)
+        /// </summary>
+        Four
     }
 }

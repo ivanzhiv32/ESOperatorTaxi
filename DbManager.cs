@@ -89,6 +89,8 @@ namespace ESOperatorTaxi
                     return driverSelectionRules;
                 case nameof(PriceRule):
                     return priceRules;
+                case nameof(DriverRating):
+                    return DriverRatings;
                 default:
                     return null;
             }

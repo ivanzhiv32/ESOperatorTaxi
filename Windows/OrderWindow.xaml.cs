@@ -25,36 +25,29 @@ namespace ESOperatorTaxi
     public partial class OrderWindow : Window
     {
         DbManager dbManager;
-        //MainWindow mainWindow = new MainWindow();
         Order order = new Order();
+        OperatorService operatorService;
+        //internal static readonly OperatorService operatorService;
         public OrderWindow()
         {
             InitializeComponent();
-            //dbManager.Load();
 
             carClass_cb.Items.Add(CarClass.Econom);
             carClass_cb.Items.Add(CarClass.Comfort);
             carClass_cb.Items.Add(CarClass.Business);
         }
-        internal OrderWindow(DbManager dbManager)
+
+        internal OrderWindow(DbManager dbManager, OperatorService operatorService):this()
         {
-            InitializeComponent();
             this.dbManager = dbManager;
-
-            carClass_cb.Items.Add(CarClass.Econom);
-            carClass_cb.Items.Add(CarClass.Comfort);
-            carClass_cb.Items.Add(CarClass.Business);
+            this.operatorService = operatorService;
         }
-        internal OrderWindow(DbManager dbManager, Order order)
+
+        internal OrderWindow(DbManager dbManager, OperatorService operatorService, Order order):this()
         {
-            InitializeComponent();
-
-            carClass_cb.Items.Add(CarClass.Econom);
-            carClass_cb.Items.Add(CarClass.Comfort);
-            carClass_cb.Items.Add(CarClass.Business);
-
             this.order = order;
             this.dbManager = dbManager;
+            this.operatorService = operatorService;
 
             phoneNumberClient_tb.Text = Convert.ToString(order.Client.PhoneNumber);
             phoneNumberClient_tb.IsReadOnly = true;
@@ -214,9 +207,36 @@ namespace ESOperatorTaxi
 
         private void distance_btn_Click(object sender, RoutedEventArgs e)
         {
-            foreach(DataGridRow row in dataGridSuitableDrivers.Items)
+            Driver driver = (Driver)dataGridSuitableDrivers.SelectedItem;
+            if(driver == null)
             {
+                MessageBox.Show("Выберите водителя из таблицы");
             }
+
+            Geopoint start = new Geopoint("Брянск", startStreet_tb.Text, Convert.ToInt32(startHouseNumber_tb.Text));
+            Geopoint finish = driver.GetLocation();
+            double distance = start.GetDistanceTo(finish);
+
+            //foreach(DataGridRow row in dataGridSuitableDrivers.Items)
+            //{
+                
+
+            //    //Geopoint geopoint = driver.GetLocation();
+
+            //}
+        }
+
+        private void autoSelectDriver_checkBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void autoSelectPrice_checkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Geopoint start = new Geopoint("Брянск", startStreet_tb.Text, Convert.ToInt32(startHouseNumber_tb.Text));
+            Geopoint finish = new Geopoint("Брянск", finishStreet_tb.Text, Convert.ToInt32(finishHouseNumber_tb.Text));
+
+            price_tb.Text = Convert.ToString((int)operatorService.CalculateBasePrice(start, finish, (OrderClass)carClass_cb.SelectedItem));
         }
     }
 }

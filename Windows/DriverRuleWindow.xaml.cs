@@ -37,6 +37,7 @@ namespace ESOperatorTaxi
             degreeCompliance_cb.Items.Add(DegreeCompliance.One);
             degreeCompliance_cb.Items.Add(DegreeCompliance.Two);
             degreeCompliance_cb.Items.Add(DegreeCompliance.Three);
+            degreeCompliance_cb.Items.Add(DegreeCompliance.Four);
         }
 
         internal DriverRuleWindow(DbManager dbManager):this()

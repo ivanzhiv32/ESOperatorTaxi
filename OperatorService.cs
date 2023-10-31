@@ -62,7 +62,7 @@ namespace ESOperatorTaxi
             {
                 if (distance > rule.StartRange && distance < rule.EndRange && rule.OrderClass == orderClass) 
                 {
-                    price = rule.PricePerKm * (decimal)distance + rule.Boarding;
+                    price = rule.PricePerKm * (decimal)distance/1000 + rule.Boarding;
                     isRuleFound = true;
                     break;
                 }
