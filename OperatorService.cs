@@ -85,7 +85,7 @@ namespace ESOperatorTaxi
             if (geoPointFrom is null)
                 throw new ArgumentNullException(nameof(geoPointFrom));
 
-            var result = new Dictionary<Driver, DegreeCompliance>();
+            var suitableDrivers = new Dictionary<Driver, DegreeCompliance>();
             foreach (var driver in drivers.Where(d => d.IsFree))
             {
                 double distance = driver.GetLocation().GetDistanceTo(geoPointFrom);
@@ -100,15 +100,24 @@ namespace ESOperatorTaxi
                     rating >= rule.MinDriverRating;
                 });
 
-                if (rules.Count() > 0) 
+                if (rules.Count() > 0)
                 {
-                    // Выбор наилучшей степени соответствия
                     DegreeCompliance degreeCompliance = rules.Min(r => r.DegreeCompliance);
-                    result.Add(driver, degreeCompliance);
+
+                    if (suitableDrivers.Count == 0) suitableDrivers.Add(driver, degreeCompliance);
+
+                    else if (suitableDrivers.Min(r => r.Value) >= degreeCompliance)
+                    {
+                        if(suitableDrivers.Min(r => r.Key.GetLocation().GetDistanceTo(geoPointFrom) > distance))
+                        {
+                            suitableDrivers.Clear();
+                            suitableDrivers.Add(driver, degreeCompliance);
+                        }
+                    }
                 }
             }
 
-            return result;
+            return suitableDrivers;
         }
     }
 }

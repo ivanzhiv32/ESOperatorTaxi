@@ -18,13 +18,21 @@ namespace ESOperatorTaxi
 
         public Geopoint(string city, string street, int home)
         {
-            XDocument xdoc = GetXmlSearchResult(city, street, home);
-            var place = xdoc.Element("searchresults").Element("place");
-            string lat = place.Attribute("lat").Value;
-            string lon = place.Attribute("lon").Value;
-            double latitude = Convert.ToDouble(lat.Replace('.', ','));
-            double longitude = Convert.ToDouble(lon.Replace('.', ','));
-            _coordinate = new GeoCoordinate(latitude, longitude);
+            try
+            {
+                XDocument xdoc = GetXmlSearchResult(city, street, home);
+                var place = xdoc.Element("searchresults").Element("place");
+                string lat = place.Attribute("lat").Value;
+                string lon = place.Attribute("lon").Value;
+                double latitude = Convert.ToDouble(lat.Replace('.', ','));
+                double longitude = Convert.ToDouble(lon.Replace('.', ','));
+                _coordinate = new GeoCoordinate(latitude, longitude);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            
 
             _city = city;
             _street = street;

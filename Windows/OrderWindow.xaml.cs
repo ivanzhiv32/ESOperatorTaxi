@@ -205,38 +205,65 @@ namespace ESOperatorTaxi
             Close();
         }
 
-        private void distance_btn_Click(object sender, RoutedEventArgs e)
-        {
-            Driver driver = (Driver)dataGridSuitableDrivers.SelectedItem;
-            if(driver == null)
-            {
-                MessageBox.Show("Выберите водителя из таблицы");
-            }
+        //private void distance_btn_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Driver driver = (Driver)dataGridSuitableDrivers.SelectedItem;
+        //    if(driver == null)
+        //    {
+        //        MessageBox.Show("Выберите водителя из таблицы");
+        //    }
 
-            Geopoint start = new Geopoint("Брянск", startStreet_tb.Text, Convert.ToInt32(startHouseNumber_tb.Text));
-            Geopoint finish = driver.GetLocation();
-            double distance = start.GetDistanceTo(finish);
+        //    Geopoint start = new Geopoint("Брянск", startStreet_tb.Text, Convert.ToInt32(startHouseNumber_tb.Text));
+        //    Geopoint finish = driver.GetLocation();
+        //    double distance = start.GetDistanceTo(finish);
 
-            //foreach(DataGridRow row in dataGridSuitableDrivers.Items)
-            //{
+        //    //foreach(DataGridRow row in dataGridSuitableDrivers.Items)
+        //    //{
                 
 
-            //    //Geopoint geopoint = driver.GetLocation();
+        //    //    //Geopoint geopoint = driver.GetLocation();
 
-            //}
-        }
+        //    //}
+        //}
 
         private void autoSelectDriver_checkBox_Checked(object sender, RoutedEventArgs e)
         {
+            Geopoint start = new Geopoint("Брянск", startStreet_tb.Text, Convert.ToInt32(startHouseNumber_tb.Text));
 
+            try
+            {
+                var driver = operatorService.ChooseDrivers(start, (OrderClass)carClass_cb.SelectedItem);
+                if((CarClass)carClass_cb.SelectedItem != driver.Keys.First().Car.CarClass)
+                {
+                    carClass_cb.SelectedItem = driver.Keys.First().Car.CarClass;
+                    MessageBox.Show("Класс заказа был повышен в связи с отсутствием подходящих водителей");
+                }
+                
+                dataGridSuitableDrivers.SelectedItem = driver.Keys.First();
+                driver_tb.Text = driver.Keys.First().Surname;
+            }
+            catch
+            {
+                autoSelectDriver_checkBox.IsChecked = false;
+                MessageBox.Show("Подходящие водители не найдены");
+            }
+            
         }
 
         private void autoSelectPrice_checkBox_Checked(object sender, RoutedEventArgs e)
         {
-            Geopoint start = new Geopoint("Брянск", startStreet_tb.Text, Convert.ToInt32(startHouseNumber_tb.Text));
-            Geopoint finish = new Geopoint("Брянск", finishStreet_tb.Text, Convert.ToInt32(finishHouseNumber_tb.Text));
+            try
+            {
+                Geopoint start = new Geopoint("Брянск", startStreet_tb.Text, Convert.ToInt32(startHouseNumber_tb.Text));
+                Geopoint finish = new Geopoint("Брянск", finishStreet_tb.Text, Convert.ToInt32(finishHouseNumber_tb.Text));
 
-            price_tb.Text = Convert.ToString((int)operatorService.CalculateBasePrice(start, finish, (OrderClass)carClass_cb.SelectedItem));
+                price_tb.Text = Convert.ToString((int)operatorService.CalculateBasePrice(start, finish, (OrderClass)carClass_cb.SelectedItem));
+            }
+            catch
+            {
+                autoSelectPrice_checkBox.IsChecked = false;
+                MessageBox.Show("Не удалось посчитать стоимость поездки.\nПроверьте правильность введенного адреса.");
+            }
         }
     }
 }

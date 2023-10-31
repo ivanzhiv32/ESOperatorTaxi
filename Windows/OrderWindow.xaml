@@ -62,7 +62,7 @@
             <TextBox x:Name="finishEntranseNumber_tb" Margin="2" Grid.Column="1" Grid.Row="12"></TextBox>
             <Button x:Name="create_btn" Visibility="Hidden" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="2" Width="200" Margin="2" Click="create_btn_Click">Добавить заказ</Button>
             <Button x:Name="change_btn" Visibility="Hidden" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="2" Width="200" Margin="2" Click="change_btn_Click">Изменить заказ</Button>
-            <Button x:Name="distance_btn" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="2" Width="200" Margin="2" Click="distance_btn_Click">Расстояние</Button>
+            <!--<Button x:Name="distance_btn" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="2" Width="200" Margin="2" Click="distance_btn_Click">Расстояние</Button>-->
         </Grid>
         <StackPanel Orientation="Vertical">
             <Label HorizontalAlignment="Center">Подходящие водители</Label>
