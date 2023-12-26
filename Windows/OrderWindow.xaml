@@ -68,10 +68,10 @@
             <Label HorizontalAlignment="Center">Подходящие водители</Label>
             <DataGrid x:Name="dataGridSuitableDrivers" HorizontalAlignment="Left" Margin="2" VerticalAlignment="Top" Height="250" Width="415" SelectionChanged="dataGridAddDrivers_SelectionChanged">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Расстояние" Width="80" x:Name="distanse"/>
                     <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Surname}" Width="100"/>
-                    <DataGridTextColumn Header="Класс авто"  Binding="{Binding Path=Car.CarClass}" Width="90" />
-                    <DataGridTextColumn Header="Тел. номер" Binding="{Binding Path=PhoneNumber}" Width="120" />
+                    <DataGridTextColumn Header="Тел. номер" Binding="{Binding Path=PhoneNumber}" Width="90" />
+                    <DataGridTextColumn Header="Класс авто"  Binding="{Binding Path=Car.CarClass}" Width="70" />
+                    <DataGridTextColumn Header="Номер автомобиля" Binding="{Binding Path=Car.Number}" Width="120" />
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Orientation="Horizontal">

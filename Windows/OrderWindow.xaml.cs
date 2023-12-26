@@ -204,28 +204,6 @@ namespace ESOperatorTaxi
             dbManager.Update<Order>(order);
             Close();
         }
-
-        //private void distance_btn_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Driver driver = (Driver)dataGridSuitableDrivers.SelectedItem;
-        //    if(driver == null)
-        //    {
-        //        MessageBox.Show("Выберите водителя из таблицы");
-        //    }
-
-        //    Geopoint start = new Geopoint("Брянск", startStreet_tb.Text, Convert.ToInt32(startHouseNumber_tb.Text));
-        //    Geopoint finish = driver.GetLocation();
-        //    double distance = start.GetDistanceTo(finish);
-
-        //    //foreach(DataGridRow row in dataGridSuitableDrivers.Items)
-        //    //{
-                
-
-        //    //    //Geopoint geopoint = driver.GetLocation();
-
-        //    //}
-        //}
-
         private void autoSelectDriver_checkBox_Checked(object sender, RoutedEventArgs e)
         {
             Geopoint start = new Geopoint("Брянск", startStreet_tb.Text, Convert.ToInt32(startHouseNumber_tb.Text));

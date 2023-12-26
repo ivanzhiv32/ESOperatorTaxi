@@ -1,20 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Data;
-
-using MySql.Data.MySqlClient;
 
 namespace ESOperatorTaxi
 {
@@ -35,7 +22,6 @@ namespace ESOperatorTaxi
 
             this.operatorService = new OperatorService(dbManager.PriceRules, dbManager.DriverSelectionRules, dbManager.Drivers, dbManager.DriverRatings);
         }
-
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -105,24 +91,6 @@ namespace ESOperatorTaxi
                 {
                     dataGridDriverRules.Items.Add(rule);
                 }
-
-                //classOrderRule_cb.Items.Clear();
-                //classOrderRule_cb.Items.Add("Не выбрано");
-                //classOrderRule_cb.Items.Add(OrderClass.Econom);
-                //classOrderRule_cb.Items.Add(OrderClass.Comfort);
-                //classOrderRule_cb.Items.Add(OrderClass.Business);
-
-                //classOrderRule_cb.Items.Clear();
-                //classOrderRule_cb.Items.Add("Не выбрано");
-                //classOrderRule_cb.Items.Add(CarClass.Econom);
-                //classOrderRule_cb.Items.Add(CarClass.Comfort);
-                //classOrderRule_cb.Items.Add(CarClass.Business);
-
-                //degreeCompliance_cb.Items.Clear();
-                //degreeCompliance_cb.Items.Add("Не выбрано");
-                //degreeCompliance_cb.Items.Add(DegreeCompliance.One);
-                //degreeCompliance_cb.Items.Add(DegreeCompliance.Two);
-                //degreeCompliance_cb.Items.Add(DegreeCompliance.Three);
             }
             else if (selectedTab.Name == "TabPriceRules")
             {
@@ -527,6 +495,18 @@ namespace ESOperatorTaxi
             {
                 dataGridPriceRules.Items.Add(rule);
             }
+        }
+
+        private void reportDriver_btn_Click(object sender, RoutedEventArgs e)
+        {
+            Driver driver = (Driver)dataGridDrivers.SelectedItem;
+            if (driver == null)
+            {
+                MessageBox.Show("Выберите водителя из таблицы");
+                return;
+            }
+            Windows.ReportDriver reportDriver = new Windows.ReportDriver(dbManager, driver);
+            reportDriver.Show();
         }
     }
 }

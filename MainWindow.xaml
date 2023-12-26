@@ -53,6 +53,7 @@
                                 Обновить
                             </Button>
                             <Separator />
+                            
                         </ToolBar>
                         <Grid Margin="10 5">
                             <Grid.RowDefinitions>
@@ -107,6 +108,8 @@
                             <Button x:Name="changeDriver_btn" Click="changeDriver_btn_Click">Изменить</Button>
                             <Separator />
                             <Button x:Name="updateDriver_btn" Click="updateDriver_btn_Click">Обновить</Button>
+                            <Separator />
+                            <Button x:Name="reportDriver_btn" Click="reportDriver_btn_Click">Отчет по водителю</Button>
                         </ToolBar>
                         <Grid Margin="10 5">
                             <Grid.RowDefinitions>
